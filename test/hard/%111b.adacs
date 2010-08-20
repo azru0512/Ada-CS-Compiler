@@ -1,0 +1,44 @@
+-- $$111B 
+ 
+--  Check if type names INTEGER/REAL/BOOLEAN and TRUE/FALSE literals 
+--    are reserved.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     declare
+       integer : INTEGER;      -- Error: integer hides predefined INTEGER
+       Boolean : CONSTANT REAL := 0.0;  -- OK
+       Real    : BOOLEAN;      -- Error: BOOLEAN is not type name now
+     begin
+       NULL;
+     end;
+ 
+     declare
+       FALSE   : INTEGER;                    -- OK
+       TRUETRUE: CONSTANT BOOLEAN := TRUE;   -- OK
+       TRUE    : CONSTANT INTEGER := 1;      -- OK
+       REAL    : CONSTANT INTEGER := -1;     -- OK
+       boolean : CONSTANT INTEGER := REAL + TRUE; -- OK
+     begin
+       
+         declare
+           R : REAL;                         -- ERROR
+           B : BOOLEAN;                      -- ERROR
+         begin
+           if TRUETRUE /= TRUE then          -- ERROR: wrong types
+              NULL;
+           elsif FALSE then                  -- ERROR: wrong types
+              NULL;
+           end if;
+                                             -- BUT
+           FALSE := TRUE * REAL + BOOLEAN;   -- OK
+           if BOOLEAN mod FALSE = REAL then  -- OK
+              NULL;
+           end if;
+         end;
+          
+     end;
+ 
+END Main;

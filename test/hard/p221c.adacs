@@ -1,0 +1,305 @@
+-- $P221C -- adapted from the following ACVC test(s):
+--   C67002A.ADA
+ 
+-- CHECK THAT ALL OPERATOR SYMBOLS CAN BE USED IN (OVERLOADED)
+--   FUNCTION SPECIFICATIONS WITH THE REQUIRED NUMBER OF PARAMETERS.
+--   SUBTESTS ARE:
+--        (B) THROUGH (P): "AND", "OR", "<", "<=",
+--             ">", ">=", "&", "*", "/", "MOD", "**", "+", "-",
+--             RESPECTIVELY.  ALL OF THESE HAVE TWO PARAMETERS.
+--        (Q), (R), AND (S): "+", "-", "NOT", RESPECTIVELY,
+--             WITH ONE PARAMETER.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+     WRITE("Test $P221C:"; NEXT);
+ 
+     DECLARE -- (B)
+          FUNCTION "AND" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "AND";
+ 
+     BEGIN -- (B)
+          IF (10 AND 1) /= TRUE OR
+             (5 AND 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""AND"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (B)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (C)
+          FUNCTION "OR" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "OR";
+ 
+     BEGIN -- (C)
+          IF (10 OR 1) /= TRUE OR
+             (5 OR 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""OR"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (C)
+ 
+     DECLARE -- (E)
+          FUNCTION "<" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "<";
+ 
+     BEGIN -- (E)
+          IF (10 < 1) /= TRUE OR
+             (5 < 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""<"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (E)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (F)
+          FUNCTION "<=" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "<=";
+ 
+     BEGIN -- (F)
+          IF (10 <= 1) /= TRUE OR
+             (5 <= 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""<="" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (F)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (G)
+          FUNCTION ">" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END ">";
+ 
+     BEGIN -- (G)
+          IF (10 > 1) /= TRUE OR
+             (5 > 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF "">"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (G)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (H)
+          FUNCTION ">=" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END ">=";
+ 
+     BEGIN -- (H)
+          IF (10 >= 1) /= TRUE OR
+             (5 >= 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF "">="" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (H)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (I)
+          FUNCTION "&" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "&";
+ 
+     BEGIN -- (I)
+          IF (10 & 1) /= TRUE OR
+             (5 & 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""&"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (I)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (J)
+          FUNCTION "*" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "*";
+ 
+     BEGIN -- (J)
+          IF (10 * 1) /= TRUE OR
+             (5 * 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""*"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (J)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (K)
+          FUNCTION "/" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "/";
+ 
+     BEGIN -- (K)
+          IF (10 / 1) /= TRUE OR
+             (5 / 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""/"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (K)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (L)
+          FUNCTION "MOD" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "MOD";
+ 
+     BEGIN -- (L)
+          IF (10 MOD 1) /= TRUE OR
+             (5 MOD 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""MOD"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (L)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (N)
+          FUNCTION "**" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "**";
+ 
+     BEGIN -- (N)
+          IF (10 ** 1) /= TRUE OR
+             (5 ** 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""**"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (N)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (O)
+          FUNCTION "+" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "+";
+ 
+     BEGIN -- (O)
+          IF (10 + 1) /= TRUE OR
+             (5 + 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""+"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (O)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (P)
+          FUNCTION "-" (I1, I2 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 > I2 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "-";
+ 
+     BEGIN -- (P)
+          IF (10 - 1) /= TRUE OR
+             (5 - 10) /= FALSE THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""-"" OPERATOR DEFECTIVE");
+          END IF;
+     END; -- (P)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (Q)
+          FUNCTION "+" (I1 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 < 0 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "+";
+ 
+     BEGIN -- (Q)
+          IF (+ 25 /= FALSE) OR
+             (+ (0-25) /= TRUE) THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""+"" OPERATOR (ONE OPERAND) DEFECTIVE");
+          END IF;
+     END; -- (Q)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (R)
+          FUNCTION "-" (I1 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 < 0 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "-";
+ 
+     BEGIN -- (R)
+          IF (- 25 /= FALSE) OR
+             (- (0-25) /= TRUE) THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""-"" OPERATOR (ONE OPERAND) DEFECTIVE");
+          END IF;
+     END; -- (R)
+ 
+     -------------------------------------------------
+ 
+     DECLARE -- (S)
+          FUNCTION "NOT" (I1 : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               IF I1 < 0 THEN
+                    RETURN TRUE;
+               ELSE RETURN FALSE;
+               END IF;
+          END "NOT";
+ 
+     BEGIN -- (S)
+          IF (NOT 25 /= FALSE) OR
+             (NOT (0-25) /= TRUE) THEN
+               WRITE(NEXT; "==> OVERLOADING OF ""NOT"" OPERATOR (ONE OPERAND) DEFECTIVE");
+          END IF;
+     END; -- (S)
+ 
+     -------------------------------------------------
+ 
+     WRITE(NEXT);
+END Main;

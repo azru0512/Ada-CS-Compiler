@@ -1,0 +1,55 @@
+-- $$222C -- adapted from the following ACVC test(s):
+--   D4A002A-AB.ADA & Babbage tests 
+ 
+-- LARGE LITERALS IN NUMBER DECLARATIONS, BUT WITH RESULTING
+-- SMALLER VALUE OBTAINED BY SUBTRACTION. THIS TEST LIMITS VALUES
+-- TO 32 BINARY PLACES.
+-- Check ABS and MOD.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+   WRITE("Test $$222C:");  WRITE(NEXT);
+ 
+   DECLARE
+ 
+     X, Y, Z : INTEGER ;
+     D, E, F : INTEGER ; 
+     W       : CONSTANT INTEGER := 2 ** 30;
+ 
+   BEGIN
+      X := 2123456788;
+      X := X - 2123456789;
+      Y := 2 * (10 ** 9);
+      Y := -1999999999 + Y;
+      Z := (1024 ** 3);
+      Z := Z - W;
+      D := 1_073_741_823;
+      D := D / 32_769;
+      E := 536_870_912 / 2_304_167;
+      E := 536870912 - E * 2304167;          -- REM
+      F := (-134_217_728);
+      F := F MOD (-262_657);
+ 
+      IF X /= -1 OR Y /= 1 OR Z /= 0 OR D /= 32_767 OR E /= 1 OR F /= -1
+      THEN
+           WRITE(NEXT);
+           WRITE("==> EXPRESSIONS WITH A LARGE INTEGER RANGE (WITH CANCELLATION) ARE NOT EXACT ");
+      END IF;
+                              -- check MOD
+      X := 13;
+      Y := -5;
+      Z := ABS X MOD Y;  D := (-X) MOD Y;
+      E := X MOD ABS Y;  F := (-X) MOD (-Y);
+      IF Z /= -2 OR D /= -3 OR E /= 3 OR F /= 2 
+      THEN
+           WRITE(NEXT);
+           WRITE("==> 'MOD' operation does not work properly.");
+      END IF;
+ 
+    END;
+      
+      WRITE(NEXT);
+ 
+END Main;

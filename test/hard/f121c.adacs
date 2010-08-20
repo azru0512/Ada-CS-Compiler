@@ -1,0 +1,52 @@
+-- $F121C -- adapted from the following ACVC test(s):
+--   C58004A-AB.ADA
+ 
+-- CHECK THAT A RETURN STATEMENT TERMINATES EXECUTION
+--    OF THE INNERMOST ENCLOSING SUBPROGRAM.
+ 
+PACKAGE Main IS
+ 
+BODY
+ 
+     I1, I2 : INTEGER;
+ 
+     PROCEDURE ADDM (IA1 : IN OUT INTEGER; IA2 : IN INTEGER) IS
+ 
+          PROCEDURE MULT (IM1 : IN OUT INTEGER; IM2 : IN INTEGER) IS
+ 
+          BEGIN
+               IM1 := IM1 * IM2;
+ 
+               IF IM1 > 0 THEN RETURN;
+               END IF;
+ 
+               IM1 := 0;
+          END MULT;
+ 
+     BEGIN
+          MULT (IA1, IA2);
+          IA1 := IA1 + IA2;
+ 
+          IF IA1 > 0 THEN RETURN;
+          END IF;
+ 
+          IA1 := 0;
+     END ADDM;
+ 
+BEGIN
+     WRITE("Test $F121C:"; NEXT);
+ 
+     I1 := 2;
+     I2 := 3;
+     ADDM (I1,I2);     -- SAME AS I1 := (I1 * I2) + I2
+ 
+     IF I1 = 0 THEN
+          WRITE(NEXT; "==> RETURN DOES NOT TERMINATE SUBPROGRAM");
+     ELSIF I1 = 6 THEN
+          WRITE(NEXT; "==> RETURN TERMINATES ALL SUBPROGRAMS NOT JUST INNERMOST");
+     ELSIF I1 /= 9 THEN
+          WRITE(NEXT; "==> RETURN STATEMENT NOT WORKING CORRECTLY");
+     END IF;
+ 
+     WRITE(NEXT);
+END Main;

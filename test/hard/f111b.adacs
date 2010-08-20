@@ -1,0 +1,76 @@
+-- $F111B -- adapted from the following ACVC test(s):
+--   B62001A.ADA
+ 
+-- CHECK THAT A FORMAL IN PARAMETER CANNOT BE USED AS THE TARGET OF AN
+--   ASSIGNMENT STATEMENT OR AS AN ACTUAL PARAMETER WHOSE MODE IS OUT
+--   OR IN OUT.
+ 
+PACKAGE Main IS
+ 
+BODY
+ 
+     PROCEDURE P0 (I : IN INTEGER; T : IN REAL; R : IN INTEGER;
+                      P : IN BOOLEAN) IS
+ 
+          PROCEDURE P1 (I : IN OUT INTEGER) IS
+          BEGIN
+               NULL;
+          END P1;
+ 
+          PROCEDURE P2 (I : OUT INTEGER) IS
+          BEGIN
+               NULL;
+          END P2;
+ 
+          PROCEDURE P3 (T : IN OUT REAL) IS
+          BEGIN
+               NULL;
+          END P3;
+ 
+          PROCEDURE P4 (T : OUT REAL) IS
+          BEGIN
+               NULL;
+          END P4;
+ 
+          PROCEDURE P5 (R : IN OUT INTEGER) IS
+          BEGIN
+               NULL;
+          END P5;
+ 
+          PROCEDURE P6 (R : OUT INTEGER) IS
+          BEGIN
+               NULL;
+          END P6;
+ 
+          PROCEDURE P7 (P : IN OUT BOOLEAN) IS
+          BEGIN
+               NULL;
+          END P7;
+ 
+          PROCEDURE P8 (P : OUT BOOLEAN) IS
+          BEGIN
+               NULL;
+          END P8;
+ 
+     BEGIN
+ 
+          I := 3;             -- ERROR: IN PARAMETER ASSIGNED TO.
+          P1 (I);             -- ERROR: IN PARAMETER USED AS IN OUT.
+          P2 (I);             -- ERROR: IN PARAMETER USED AS OUT.
+ 
+          T := 1.23456;       -- ERROR: IN PARAMETER ASSIGNED TO.
+          P3 (T);             -- ERROR: IN PARAMETER USED AS IN OUT.
+          P4 (T);             -- ERROR: IN PARAMETER USED AS OUT.
+ 
+          R := -12345678;     -- ERROR: IN PARAMETER ASSIGNED TO.
+          P5 (R);             -- ERROR: IN PARAMETER USED AS IN OUT.
+          P6 (R);             -- ERROR: IN PARAMETER USED AS OUT.
+ 
+          P := I /= R;        -- ERROR: IN PARAMETER ASSIGNED TO.
+          P7 (P);             -- ERROR: IN PARAMETER USED AS IN OUT.
+          P8 (P);             -- ERROR: IN PARAMETER USED AS OUT.
+     END P0;
+ 
+BEGIN
+     NULL;
+END Main;

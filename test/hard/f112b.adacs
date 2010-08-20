@@ -1,0 +1,42 @@
+-- $F112B -- adapted from the following ACVC test(s):
+--   B62006F-B.ADA
+ 
+-- CHECK THAT AN OUT PARAMETER MAY NOT BE USED AS AN IN OR IN OUT ACTUAL
+-- PARAMETER.
+ 
+PACKAGE Main IS
+BODY
+ 
+     PROCEDURE P (X, Y : OUT BOOLEAN) IS
+ 
+          PROCEDURE P_IN (C : IN BOOLEAN) IS
+          BEGIN
+               NULL;
+          END P_IN;
+ 
+          PROCEDURE P_INOUT (C : IN OUT BOOLEAN) IS
+          BEGIN
+               C := FALSE;
+          END P_INOUT;
+ 
+          PROCEDURE P_OUT (C : OUT BOOLEAN) IS
+          BEGIN
+               C := TRUE;
+          END P_OUT;
+ 
+     BEGIN
+ 
+          P_IN (X);           -- ERROR: OUT PARAMETER USED AS IN.
+          P_IN (Y);           -- ERROR: OUT PARAMETER USED AS IN.
+ 
+          P_INOUT (X);        -- ERROR: OUT PARAMETER USED AS INOUT.
+          P_INOUT (Y);        -- ERROR: OUT PARAMETER USED AS INOUT.
+ 
+          P_OUT (X);          -- OK.
+          P_OUT (Y);          -- OK.
+ 
+     END P;
+ 
+BEGIN
+     NULL;
+END Main;

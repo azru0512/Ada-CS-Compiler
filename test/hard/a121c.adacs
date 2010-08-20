@@ -1,0 +1,32 @@
+-- $A121C -- adapted from the following ACVC test(s):
+--   C55B03A-AB.ADA
+ 
+-- CHECK THAT THE LOOP_PARAMETER IS ASSIGNED VALUES IN ASCENDING ORDER 
+--   IF REVERSE IS ABSENT, AND DESCENDING ORDER IF REVERSE IS PRESENT.
+ 
+PACKAGE Main IS
+ 
+     I1 : INTEGER;
+ 
+BODY BEGIN
+     WRITE("Test $A121C:"; NEXT);
+ 
+     I1 := 0;
+     FOR I IN 1..5 LOOP
+          I1 := I1 + 1;
+          IF ( I /= I1 ) THEN
+               WRITE(NEXT; "==> LOOP_PARAMETER ASCENDING INCORRECTLY" );
+          END IF;
+     END LOOP;
+ 
+     I1 := 6;
+     FOR I IN REVERSE 1..5 LOOP
+          I1 := I1 - 1;
+          IF ( I /= I1 ) THEN
+               WRITE(NEXT; "==> LOOP_PARAMETER DESCENDING INCORRECTLY" );
+          END IF;
+     END LOOP;
+ 
+     WRITE(NEXT);
+ 
+END Main;

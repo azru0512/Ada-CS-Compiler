@@ -1,0 +1,34 @@
+-- $I031D -- adapted from the following ACVC test(s):
+--   D4A004A-AB.ADA (w/ changes to do extra test.)
+ 
+-- 32 BIT INTEGERS IN NUMBER DECLARATIONS. UNLIKE TEST D4A002A,
+-- NO CANCELLATION IS INVOLVED.
+-- A COMPILER MAY REFUSE TO COMPILE THIS TEST BECAUSE THE NUMBERS
+-- INVOLVED ARE TOO BIG.
+ 
+ 
+PACKAGE Main IS
+ 
+     X : INTEGER;
+     Y : INTEGER;
+     D : INTEGER;
+     F : INTEGER;
+     Z : CONSTANT integer := 2147483647;     -- INTEGER'LAST (32 bits)
+ 
+BODY BEGIN
+     WRITE("Test $I031D:"; NEXT);
+ 
+     D := 2 ** 31 / 1 - 1;
+     Y := - Z - 1;
+     X := Z + Z - Z;
+     F := 2 ** 16 * (- 2) ** 17 / 4;
+ 
+     IF D /= Z OR F /= Y OR X /= Z
+     THEN
+          WRITE(NEXT);
+          WRITE("==> EXPRESSIONS WITH A LARGE INTEGER RANGE (W/O CANCELLATION) ARE NOT EXACT ");
+     END IF;
+ 
+     WRITE(NEXT);
+ 
+END Main;

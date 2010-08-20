@@ -1,0 +1,35 @@
+-- $B111B -- adapted from the following ACVC test(s):
+--   B41101C-AB.ADA
+ 
+-- CHECK THAT THE BASE TYPE OF THE SUBSCRIPT OF AN INDEXED
+--   COMPONENT MUST BE THE SAME AS THE BASE TYPE OF THE INDEX
+--   OF THE ARRAY TYPE.
+ 
+PACKAGE Main IS
+ 
+     SUBTYPE S IS INTEGER RANGE 5..50;
+     SUBTYPE S1 IS S RANGE 5 .. 10;
+     TYPE S2 IS ARRAY (S1) OF INTEGER;
+     X : INTEGER;
+ 
+     A : S2;
+     I : INTEGER;
+     J : INTEGER;
+ 
+     TYPE U IS (E1,E2,E3,E4);
+     U1 : ARRAY (U) OF INTEGER;
+ 
+BODY BEGIN
+ 
+     X := 6;
+     I := A(X,1);             -- Error: too many indices
+     NULL;
+     I := A(E2);              -- ERROR: DIFFERENT INDEX BASE TYPES.
+     NULL;
+     I := A(FALSE);           -- ERROR: DIFFERENT INDEX BASE TYPES.
+     NULL;
+     I := A("Index");         -- ERROR: DIFFERENT INDEX BASE TYPES.
+     NULL;
+     I := U1(J);              -- ERROR: DIFFERENT INDEX BASE TYPES.
+ 
+END Main;

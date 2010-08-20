@@ -1,0 +1,103 @@
+-- $C023C -- adapted from the following ACVC test(s):
+--   C45103C-AB.ADA
+ 
+-- CHECK THAT THE EVALUATION OF  "AND THEN"  AND  "OR ELSE"  IS INDEED
+--    SHORT-CIRCUITED FOR THE APPROPRIATE VALUES OF THE FIRST
+--    OPERAND.
+ 
+-- PART 3 :   COMBINATIONS
+ 
+PACKAGE Main IS
+ 
+     A          : INTEGER := 0 ;   -- INITIAL VALUE ESSENTIAL
+     B , C , D  : INTEGER := 3 ;   -- MUST HAVE A VALUE
+     FLOW_INDEX : INTEGER := 0 ;
+ 
+BODY
+ 
+     PROCEDURE  BUMP  IS
+     BEGIN
+          FLOW_INDEX  :=  FLOW_INDEX + 1 ;
+     END BUMP ;
+ 
+     FUNCTION  SIDE_EFFECT_GT( X , Y : INTEGER )  RETURN  BOOLEAN  IS
+     BEGIN
+          BUMP ;
+          RETURN ( X > Y ) ;
+     END SIDE_EFFECT_GT ;
+ 
+BEGIN
+ 
+     WRITE("Test $C023C:");  WRITE(NEXT);
+ 
+     -- (PART1: SIMPLE CASES;   PART2: CHAINS;   PART3: COMBINATIONS)
+ 
+     -- PART 3 :   COMBINATIONS
+ 
+     WRITE(NEXT);
+     WRITE( "Comment: STARTING THE CASE  ""COMBINATIONS"" " );
+     FLOW_INDEX := 0 ;
+ 
+     IF  NOT( SIDE_EFFECT_GT( A , B )  AND THEN
+              SIDE_EFFECT_GT( C , A )           )  AND
+            ( SIDE_EFFECT_GT( A , C )  AND THEN
+              SIDE_EFFECT_GT( B , A )           )
+     THEN
+          WRITE(NEXT);
+          WRITE( "==> ""S.C. AND S.C.""  -  WRONG" );
+     END IF;
+ 
+     IF     ( SIDE_EFFECT_GT( A , D )  AND THEN
+              SIDE_EFFECT_GT( B , A )           )  OR
+         NOT( SIDE_EFFECT_GT( D , A )  OR ELSE
+              SIDE_EFFECT_GT( A , C )           )
+     THEN
+          WRITE(NEXT);
+          WRITE( "==> ""S.C. OR S.C.""  -  WRONG" );
+     END IF;
+ 
+     IF NOT ( NOT(                                -- use NOT = for XOR
+                 ( SIDE_EFFECT_GT( C , A )  OR ELSE
+                   SIDE_EFFECT_GT( A , B )   )  =
+              NOT( SIDE_EFFECT_GT( D , A )  OR ELSE
+                   SIDE_EFFECT_GT( A , C )   )
+                 )
+             )
+     THEN
+          WRITE(NEXT);
+          WRITE( "==> ""S.C. XOR S.C.""  -  WRONG" );
+     END IF;
+ 
+     IF  FLOW_INDEX /= 6  THEN
+          WRITE(NEXT);
+          WRITE( "==> COMBINATIONS - WRONG # OF EVALUATIONS" );
+     END IF;
+ 
+     WRITE(NEXT);
+     WRITE( "Comment: STARTING THE CASE  ""TRIPLE-DECKER"" " );
+     FLOW_INDEX := 0 ;
+ 
+     IF  NOT( SIDE_EFFECT_GT( A , B )  AND THEN
+              SIDE_EFFECT_GT( C , A )           )
+     THEN
+          IF     ( SIDE_EFFECT_GT( A , D )  AND THEN
+                   SIDE_EFFECT_GT( B , A )           )
+          THEN  NULL ;
+          ELSE
+               IF  NOT( SIDE_EFFECT_GT( C , A )  OR ELSE
+                        SIDE_EFFECT_GT( A , B )           )
+               THEN
+                    WRITE(NEXT);
+                    WRITE( "==> ""TRIPLE-DECKER""  -  WRONG RESULT" );
+               END IF;
+          END IF;
+     END IF;
+ 
+     IF  FLOW_INDEX /= 3  THEN
+          WRITE(NEXT);
+          WRITE( "==> ""TRIPLE-DECKER"" - WRONG # OF EVALUATIONS" );
+     END IF;
+ 
+     WRITE(NEXT);
+ 
+END Main;

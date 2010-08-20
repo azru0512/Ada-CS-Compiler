@@ -1,0 +1,47 @@
+-- $$023C -- adapted from the following ACVC test(s):
+--   C51002A-AB.ADA
+ 
+-- CHECK THAT THE STATEMENTS IN A SEQUENCE OF STATEMENTS ARE
+--    EXECUTED IN SUCCESSION.
+ 
+PACKAGE Main IS
+ 
+ 
+     I1, I2, I4 : INTEGER;
+     FLOW_COUNT : INTEGER ;
+ 
+BODY BEGIN
+       
+     WRITE("Test $$023C:"; NEXT);
+ 
+     FLOW_COUNT := 3;                           -- 3
+     I1 := 3;
+     FLOW_COUNT := FLOW_COUNT + FLOW_COUNT;     -- 6
+     FLOW_COUNT := FLOW_COUNT * FLOW_COUNT;     -- 36
+     FLOW_COUNT := FLOW_COUNT + 4;              -- 40
+ 
+     BEGIN  
+          FLOW_COUNT := FLOW_COUNT + 1;         -- 41
+     END;
+ 
+     IF TRUE THEN 
+          FLOW_COUNT := FLOW_COUNT + 1;         -- 42
+     END IF;
+ 
+     IF I1 = 3 THEN
+          FLOW_COUNT := FLOW_COUNT + 1;         -- 43
+     END IF;
+ 
+     LOOP
+          FLOW_COUNT := FLOW_COUNT + 1;         -- 44, 45
+          I1 := I1 + 1;
+          EXIT WHEN I1 >= 5;
+     END LOOP;
+ 
+     IF FLOW_COUNT /= 45 THEN
+          WRITE(NEXT);
+          WRITE("==> SEQUENCE OF STMTS NOT EXECUTED PROPERLY.");
+     END IF;
+ 
+     WRITE(NEXT);
+END Main;

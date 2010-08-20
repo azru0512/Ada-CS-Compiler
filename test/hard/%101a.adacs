@@ -1,0 +1,30 @@
+ 
+ 
+-- $$101A 
+ 
+--  Check if type names INTEGER/REAL/BOOLEAN and TRUE/FALSE literals 
+--    are reserved.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+     WRITE("Test $$101A:"; NEXT);
+ 
+     declare
+       integer : REAL;
+       Boolean : REAL;
+     begin
+       integer := 1.0;
+       boolean := 2.0;
+     end;
+       
+     declare
+       REAL    : CONSTANT BOOLEAN := TRUE;
+       TRUE    : BOOLEAN;
+       BOOLEAN : CONSTANT INTEGER := 0;
+     begin
+       TRUE := REAL;
+       TRUE := BOOLEAN = 0 OR REAL OR TRUE = FALSE;   -- AHA !
+     end;
+ 
+END Main;

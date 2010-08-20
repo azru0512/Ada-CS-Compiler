@@ -1,0 +1,33 @@
+-- $H211B
+ 
+-- Subtype constraints
+--   Compile-time checks
+ 
+PACKAGE Main IS
+ 
+     SUBTYPE INT IS INTEGER RANGE 0..10;
+     SUBTYPE INX IS INTEGER RANGE -10 .. 5;
+     SUBTYPE INY IS INTEGER RANGE -10 .. -1;
+     I1 : INX;
+     I2 : INY;
+ 
+BODY
+ 
+     FUNCTION FNC2 RETURN INT IS
+          I2 : INTEGER RANGE 5..15 := 6;
+          I3 : INY := -8;
+     BEGIN
+          RETURN I2;     -- LEGAL: TYPES MATCH, SUBTYPES OVERLAP.
+          RETURN I3;     -- Error: disjoint subtypes
+     END FNC2;
+ 
+     FUNCTION FNC1 RETURN INT IS
+        I1 : INT := 0;
+     BEGIN
+          RETURN I1;
+     END FNC1;
+ 
+BEGIN
+     I1 := FNC1;      -- OK
+     I2 := FNC1;      -- Error : disjoint subtypes
+END Main;

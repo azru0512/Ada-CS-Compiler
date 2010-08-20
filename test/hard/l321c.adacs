@@ -1,0 +1,28 @@
+-- $L321C -- adapted from Babbage test #103
+ 
+-- ENUMERATIONS INCLUDING PRED AND SUCC and VAL --
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+     WRITE("Test $L321C(*):"; NEXT);
+ 
+    DECLARE 
+      TYPE NETWK IS ( ABC, CBS, NBC );
+      NET1, NET2, NET3 : NETWK;
+    BEGIN
+      NET1 := CBS;
+      NET2 := PRED(NET1);
+      NET3 := SUCC(NET1);
+      IF (NET2 /= ABC) OR (NET3 /= NBC) OR
+         (BOOLEAN'VAL(NET2)) OR (INTEGER'VAL(NET3) /= 2)
+      THEN
+        WRITE(NEXT; "==> Error in SUCC/PRED/VAL operations");
+      END IF;
+ 
+      NET1 := PRED(NET2);
+      WRITE(NEXT; "==> Failed to raise constraint error in PRED");
+    END ;
+ 
+    WRITE(NEXT);
+END Main;

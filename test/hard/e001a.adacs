@@ -1,0 +1,275 @@
+-- $E001A -- adapted from the following ACVC test(s):
+--   A83C01C.ADA, A83C01D.ADA, A83C01E.ADA, A83C01F.ADA, A83C01I.ADA, A83C01J.ADA
+ 
+-- CHECK THAT COMPONENT NAMES MAY BE THE SAME AS NAMES OF
+--    SUBPROGRAMS, FORMAL PARAMETERS, LOOP PARAMETERS,
+--    VARIABLES, CONSTANTS, SUBPROGRAMS, PACKAGES, TYPES.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     WRITE("Test $E001A:"; NEXT);
+ 
+     DECLARE
+ 
+          VAR1 , VAR2 : INTEGER ;
+          CONST1      : CONSTANT INTEGER := 13 ;
+          CONST2      : CONSTANT BOOLEAN := FALSE ;
+ 
+          TYPE  R1A  IS
+               RECORD
+                    VAR1,VAR2,CONST1:INTEGER ;
+               END RECORD ;
+ 
+          TYPE  R1  IS
+               RECORD
+                    VAR1   : INTEGER ;
+                    VAR2   : BOOLEAN ;
+                    CONST1 : BOOLEAN ;
+                    A      : R1A ;
+               END RECORD ;
+ 
+          A : R1 ;
+ 
+     BEGIN
+ 
+          VAR1 := A.A.VAR1 ;
+--        A.CONST1 := CONST1 ;
+          A.CONST1 := CONST2;
+          A.A.CONST1 := A.VAR1 + VAR2 ;
+ 
+     END ;
+ 
+ 
+     -- TEST FOR NAMES OF SUBPROGRAMS AND OF FORMAL PARAMETERS
+     --    (THE RECORD IS OUTSIDE THE SUBPROGRAM)
+ 
+     DECLARE
+ 
+          PROCEDURE  P1 ( ARG1,ARG2:INTEGER )  IS
+          BEGIN
+               NULL ;
+          END P1 ;
+ 
+          TYPE  R1A  IS
+               RECORD
+                    ARG1 , ARG2 : BOOLEAN ;
+                    P1 , F1     : INTEGER ;
+               END RECORD ;
+ 
+          TYPE  R1  IS
+               RECORD
+                    P1 , P2 : REAL ;
+                    ARG1 , ARG2 , ARG3 : INTEGER ;
+                    F1 : R1A ;
+               END RECORD ;
+ 
+          A : R1;
+ 
+          PROCEDURE  P2 ( ARG1,ARG2: REAL; ARG3:INTEGER ) IS
+          BEGIN
+               NULL ;
+          END P2 ;
+ 
+          FUNCTION  F1 ( ARG1,ARG2:BOOLEAN ) RETURN INTEGER IS
+          BEGIN
+               RETURN  17 ;
+          END F1 ;
+ 
+     BEGIN
+ 
+          P2( A.P1 , A.P2 , A.F1.P1+A.F1.F1 );
+          A.F1.F1 := F1 ( A.F1.ARG1 , A.F1.ARG2 );
+ 
+     END ;
+ 
+     -- TEST FOR NAMES OF SUBPROGRAMS AND OF FORMAL PARAMETERS
+     --    (THE RECORD IS INSIDE THE SUBPROGRAM)
+ 
+     DECLARE
+ 
+          PROCEDURE  P1 ( ARG1,ARG2:INTEGER ) IS
+ 
+          TYPE  R1A  IS
+               RECORD
+                    ARG1 , ARG2 : BOOLEAN ;
+                    P1 , F1     : INTEGER ;
+               END RECORD ;
+ 
+               TYPE  R1  IS
+                    RECORD
+                         P1 , P2 : REAL ;
+                         ARG1 , ARG2 , ARG3 : INTEGER ;
+                         F1 : R1A ;
+                    END RECORD ;
+ 
+               A : R1;
+ 
+               FUNCTION  F1 ( ARG1,ARG2:BOOLEAN ) RETURN INTEGER IS
+               BEGIN
+                    RETURN  17 ;
+               END F1 ;
+ 
+               PROCEDURE  P2 ( ARG1,ARG2:REAL; ARG3:INTEGER ) IS
+ 
+                    TYPE  R1A  IS
+                         RECORD
+                              ARG1 , ARG2 : BOOLEAN ;
+                              P1 , F1     : INTEGER ;
+                         END RECORD ;
+ 
+                    TYPE  R1  IS
+                         RECORD
+                              P1 , P2 : REAL ;
+                              ARG1 , ARG2 , ARG3 : INTEGER ;
+                              F1 : R1A ;
+                         END RECORD ;
+ 
+                    A : R1;
+ 
+               BEGIN
+ 
+                    IF  1 > 707          -- I.E. NEVER
+                    THEN
+                         P2( A.P1 , A.P2 , A.F1.P1+A.F1.F1 );
+                         A.F1.F1 := F1 ( A.F1.ARG1 , A.F1.ARG2 );
+                    END IF;
+ 
+               END P2 ;
+ 
+          BEGIN
+ 
+               P2( A.P1 , A.P2 , A.F1.P1+A.F1.F1 );
+               A.F1.F1 := F1 ( A.F1.ARG1 , A.F1.ARG2 );
+ 
+          END P1 ;
+ 
+     BEGIN
+ 
+          P1 ( 2 , 3 );
+ 
+     END ;
+ 
+     -- Package name as component names
+ 
+     DECLARE
+ 
+          TYPE  R1A  IS
+               RECORD
+                    ARG1  , ARG2  : BOOLEAN ;
+                    Main  : INTEGER ;   --OK, same as package name
+               END RECORD ;
+ 
+          TYPE  R1  IS
+               RECORD
+                    Main  : REAL;
+                    ARG1 , ARG2 , ARG3 : INTEGER ;
+                    PACK2 : R1A ;
+               END RECORD ;
+ 
+          Main : R1;             -- OK
+ 
+     BEGIN
+          NULL;
+     END;
+ 
+     -- Loop parameters as component names
+ 
+     DECLARE
+ 
+          TYPE  R1A  IS
+               RECORD
+                    LOOP3 : INTEGER ;
+               END RECORD ;
+ 
+          TYPE  R1  IS
+               RECORD
+                    LOOP1 : INTEGER ;
+                    LOOP2 : R1A ;
+               END RECORD ;
+ 
+          A1 : R1;
+ 
+     BEGIN
+ 
+          FOR  LOOP1  IN  0..1  LOOP
+ 
+               FOR  LOOP2  IN  0..2  LOOP
+ 
+                    FOR  LOOP3  IN  0..3  LOOP
+ 
+                         A1.LOOP1 := A1.LOOP2.LOOP3 ;
+ 
+                         DECLARE
+ 
+                              TYPE  R1A  IS
+                                   RECORD
+                                        LOOP3 : INTEGER ;
+                                        LOOP4 : INTEGER ;
+                                   END RECORD ;
+ 
+                              TYPE  R1  IS
+                                   RECORD
+                                        LOOP1 : INTEGER ;
+                                        LOOP2 : R1A ;
+                                   END RECORD ;
+ 
+                              A1 : R1 ;
+ 
+                         BEGIN
+ 
+                              FOR  LOOP4  IN  0..4  LOOP
+ 
+                                   A1.LOOP1 := A1.LOOP2.LOOP3 +
+                                               A1.LOOP2.LOOP4 ;
+ 
+                              END LOOP ;
+ 
+                         END ;
+ 
+                    END LOOP ;
+ 
+               END LOOP ;
+ 
+          END LOOP ;
+ 
+     END ;
+ 
+     -- TEST FOR NAMES OF TYPES AND SUBTYPES
+ 
+     DECLARE
+ 
+          TYPE  T1  IS RECORD
+                BOOLEAN : integer;    -- OK;
+                REAL    : BOOLEAN;    -- OK ??
+          END RECORD;
+ 
+          SUBTYPE  T2  IS INTEGER RANGE 0..100 ;
+ 
+          TYPE  R1A  IS
+               RECORD
+                    T1 : INTEGER ;
+                    T2 : INTEGER ;
+               END RECORD;
+ 
+          TYPE  R1  IS
+               RECORD
+                    T1 : INTEGER ;
+                    T2 : R1A ;
+               END RECORD ;
+ 
+          X  : T1 ;
+          Y  : T2 ;
+ 
+          A1 : R1 ;
+ 
+     BEGIN
+ 
+          X.REAL := X.BOOLEAN /= A1.T2.T1 + Y;
+ 
+     END ;
+ 
+     WRITE(NEXT);
+ 
+END Main;

@@ -1,0 +1,47 @@
+-- $P125C -- adapted from the following ACVC test(s):
+--   C66002G-B.ADA
+ 
+-- CHECK THAT OVERLOADED SUBPROGRAM DECLARATIONS
+-- ARE PERMITTED IN WHICH THERE IS A MINIMAL
+-- DIFFERENCE BETWEEN THE DECLARATIONS.
+ 
+--     (G) THE RESULT TYPE OF TWO FUNCTION DECLARATIONS IS DIFFERENT.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+     WRITE("Test $P125C:"; NEXT);
+ 
+     -- THE RESULT TYPES OF TWO FUNCTION
+     -- DECLARATIONS ARE DIFFERENT.
+ 
+     DECLARE
+          I : INTEGER;
+          B : BOOLEAN;
+          S : INTEGER := 0;
+ 
+          FUNCTION F RETURN INTEGER IS
+          BEGIN
+               S := S + 1;
+               RETURN 0; -- THIS VALUE IS IRRELEVENT.
+          END F;
+ 
+          FUNCTION F RETURN BOOLEAN IS
+          BEGIN
+               S := S + 10;
+               RETURN TRUE; -- THIS VALUE IS IRRELEVANT.
+          END F;
+ 
+     BEGIN
+          I := F;
+          B := F;
+ 
+          IF S /= 11 THEN
+               WRITE(NEXT; "==> FUNCTIONS DIFFERING ONLY IN BASE TYPE OF RETURNED VALUE " );
+               WRITE(NEXT; "    CAUSED CONFUSION");
+          END IF;
+     END;
+ 
+     WRITE(NEXT);
+ 
+END Main;

@@ -1,0 +1,15 @@
+-- Ada/CS scanner test program 6
+pragma ListOn;
+pragma ScanTraceOn;
+-- Do you allow pragmas to control your scanner ?
+ 
+Now you see it;
+ 
+pragma ListOff;
+Now you don't;
+ 
+pragma ScanTraceOff;
+Not even a single token.
+ 
+pragma ListOn;
+Now you see it again;

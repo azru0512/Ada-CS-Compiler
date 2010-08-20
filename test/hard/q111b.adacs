@@ -1,0 +1,41 @@
+-- $Q111B 
+ 
+-- Check general errors of combined packges
+ 
+PACKAGE P1 IS
+BODY BEGIN
+     NULL;
+END P2;                           -- ERROR: package ID's not match
+ 
+PACKAGE P2 IS
+  X : integer;
+BODY
+  Y : boolean;
+BEGIN
+  NULL;
+END;                              -- OK in Ada/CS
+ 
+PACKAGE P3 IS
+  X : constant BOOLEAN := P2.Y;   -- ERROR: P2.Y is invisible outside P2
+  Y : constant INTEGER := P2.X;   -- OK
+BODY
+  Z : constant REAL := P4.R;      -- ERROR: P4 not defined yet
+BEGIN
+  NULL;
+END P3;
+ 
+PACKAGE P4 IS
+  R : REAL;
+  PROCEDURE P (X : IN OUT INTEGER);
+BODY
+ 
+  R : INTEGER;                    -- ERROR: redefine R in the same scope
+ 
+  PROCEDURE P (Y : INTEGER) IS    -- ERROR: P's headings not match
+  BEGIN
+    NULL;
+  END P;
+ 
+BEGIN
+    NULL;
+END P4;

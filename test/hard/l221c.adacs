@@ -1,0 +1,33 @@
+-- $L221C -- adapted from Babbage test #104
+ 
+-- ENUMERATION READING AND WRITING --
+-- THIS TEST CASE REQUIRES INPUT ENUMERATION VALUES OF TYPE NOUN
+-- USE ONE valid value and one invalid value e.g. HORSE
+--                                                BIRD
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+     WRITE("Test $L221C (enumeration i/o)(*):"; NEXT);
+ 
+    DECLARE
+        TYPE NOUN IS ( HORSE, COW, PIG, CHICKEN, DUCK, DOG );
+        TYPE PRON IS ( THIS, THAT);
+        ADJ : PRON;
+        ANIMAL : NOUN;
+    BEGIN
+      ADJ := THAT;
+      ANIMAL := DUCK;
+      WRITE(THIS; "IS A"; CHICKEN; NEXT);
+      WRITE(ADJ; "IS A"; ANIMAL; NEXT; NEXT);
+ 
+      ADJ := THIS;
+      READ(ANIMAL; NEXT);
+      WRITE("Input is"; ADJ; ANIMAL; NEXT);
+ 
+      READ(ANIMAL; NEXT);        -- prepare an invalid value
+      WRITE(NEXT; "==> Failed to raise invalid input");
+    END;
+ 
+    WRITE(NEXT);
+END Main;

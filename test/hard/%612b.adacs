@@ -1,0 +1,67 @@
+-- $$612B -- adapted from the following ACVC test(s):
+--   B55A01A-AB.ADA & others
+ 
+-- CHECK BASIC LOOP SYNTAX.
+-- CHECK THAT A LOOP CAN HAVE A LOOP IDENTIFIER, AND IF PERSENT, THE
+-- SAME IDENTIFIER MUST BE PRESENT AT THE END OF THE LOOP.  IF NOT
+-- PRESENT, NO IDENTIFIER IS PERMITTED AT THE END OF THE LOOP.
+ 
+-- CHECK THAT THE IDENTIFIER MUST BE A SIMPLE NAME.
+-- Check that the identifier cannot be a local var.
+-- Check that nested loop ID's are in the same scope.
+-- Check intermixed loop ID's & block ID's.
+ 
+PACKAGE Main IS
+BODY
+ 
+     LL : INTEGER;
+ 
+BEGIN
+ 
+L1:  LOOP                -- OK.
+          EXIT;
+     END LOOP L1;        -- OK.
+ 
+L2:  LOOP
+          EXIT;
+     END LOOP L1;        -- ERROR: WRONG LOOP ID.
+ 
+L11: LOOP
+     L11A:
+          LOOP
+               EXIT;
+          END LOOP L11;  -- ERROR: INCORRECT LOOP ID.
+     END LOOP L11A;      -- ERROR: INCORRECT LOOP ID.
+ 
+LL : LOOP                -- Error: LL already defined
+       EXIT;
+     END LOOP LL;
+ 
+LX : LOOP
+     LX : LOOP           -- Error: LX already defined
+            EXIT;
+          END LOOP LX;
+     END LOOP LX;
+ 
+LY : LOOP
+     LB : BEGIN
+          LY : LOOP      -- Ok.
+                 EXIT;
+               END LOOP LY;
+          END LB;
+     END LOOP LY;
+ 
+LB : LOOP                -- Error: LB already defined as block ID
+          EXIT;
+     END LOOP LB;
+ 
+L6:  LOOP
+          EXIT;
+     END LOOP;           -- ERROR: MUST REPEAT LOOP ID.
+                         -- Since this is a syntax error by Ada/CS grammar,
+                         -- you may stop compilation at this point.
+     LOOP
+          EXIT;
+     END LOOP L7;        -- ERROR: NO LOOP ID ON BEGINNING.
+ 
+END Main;

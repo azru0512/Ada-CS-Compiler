@@ -1,0 +1,119 @@
+-- $S025C -- adapted from the following ACVC test(s):
+--   CB4001A-AB.ADA
+ 
+-- CHECK THAT ANY EXCEPTION RAISED IN THE STATEMENT SEQUENCE OF A
+-- SUBPROGRAM IS PROPAGATED TO THE CALLER OF THE SUBPROGRAM, NOT TO THE
+-- STATICALLY ENCLOSING LEXICAL ENVIRONMENT.
+ 
+PACKAGE Main IS
+ 
+     E1 : EXCEPTION;
+     I9 : INTEGER RANGE 1..10 ;
+     FLOW_COUNT : INTEGER := 0 ;
+ 
+BODY BEGIN
+     WRITE("Test $S025C:"; NEXT);
+ 
+     BEGIN   --  BLOCK WITH HANDLERS; LEX. ENVIRONMT FOR ALL PROC.DEFS
+ 
+          DECLARE   --  BLOCK WITH PROCEDURE DEFINITIONS
+ 
+               PROCEDURE  CALLEE1 ;
+               PROCEDURE  CALLEE2 ;
+               PROCEDURE  CALLEE3 ;
+               PROCEDURE  R ;
+               PROCEDURE  S ;
+ 
+               PROCEDURE  CALLER1  IS
+               BEGIN
+                    FLOW_COUNT := FLOW_COUNT + 1 ;
+                    CALLEE1 ;
+                    WRITE(NEXT; "==> EXCEPTION NOT RAISED  (CALLER1)");
+               EXCEPTION
+                    WHEN E1 =>
+                         FLOW_COUNT := FLOW_COUNT + 1 ;
+               END ;
+ 
+               PROCEDURE  CALLER2  IS
+               BEGIN
+                    FLOW_COUNT := FLOW_COUNT + 1 ;
+                    CALLEE2 ;
+                    WRITE(NEXT; "==> EXCEPTION NOT RAISED  (CALLER2)");
+               EXCEPTION
+                    WHEN CONSTRAINT_ERROR =>
+                         FLOW_COUNT := FLOW_COUNT + 1 ;
+               END ;
+ 
+               PROCEDURE  CALLER3  IS
+               BEGIN
+                    FLOW_COUNT := FLOW_COUNT + 1 ;
+                    CALLEE3 ;
+                    WRITE(NEXT; "==> EXCEPTION NOT RAISED  (CALLER3)");
+               EXCEPTION
+                    WHEN CONSTRAINT_ERROR =>
+                         FLOW_COUNT := FLOW_COUNT + 1 ;
+               END ;
+ 
+               PROCEDURE  CALLEE1  IS
+               BEGIN
+                    FLOW_COUNT := FLOW_COUNT + 1 ;
+                    R ;
+                    WRITE(NEXT; "==> EXCEPTION NOT RAISED  (CALLEE1)");
+               END ;
+ 
+               PROCEDURE  CALLEE2  IS
+               BEGIN
+                    FLOW_COUNT := FLOW_COUNT + 1 ;
+                    RAISE  CONSTRAINT_ERROR ;
+                    WRITE(NEXT; "==> EXCEPTION NOT RAISED  (CALLEE2)");
+               EXCEPTION
+                    WHEN NUMERIC_ERROR =>
+                         WRITE(NEXT; "==> WRONG EXCEPTION RAISED  (CALLEE2)");
+               END ;
+ 
+               PROCEDURE  CALLEE3  IS
+               BEGIN
+                    FLOW_COUNT := FLOW_COUNT + 1 ;
+                    I9 := 20 ;
+                    WRITE(NEXT; "==> EXCEPTION NOT RAISED  (CALLEE3)");
+               END ;
+ 
+               PROCEDURE  R  IS
+                    E2 : EXCEPTION;
+               BEGIN
+                    FLOW_COUNT := FLOW_COUNT + 10 ;
+                    S ;
+                    WRITE(NEXT; "==> EXCEPTION E1 NOT RAISED (PROC R)");
+               EXCEPTION
+                    WHEN E2 =>
+                         WRITE(NEXT; "==> WRONG EXCEPTION RAISED  (PROC R)");
+               END ;
+ 
+               PROCEDURE  S  IS
+               BEGIN
+                    FLOW_COUNT := FLOW_COUNT + 10 ;
+                    RAISE  E1 ;
+                    WRITE(NEXT; "==> EXCEPTION  E1  NOT RAISED  (PROC S)");
+               END ;
+ 
+          BEGIN   --  (THE BLOCK WITH PROC. DEFS)
+ 
+               CALLER1;
+               CALLER2;
+               CALLER3;
+ 
+          END ;   --  (THE BLOCK WITH PROC. DEFS)
+ 
+     EXCEPTION
+ 
+          WHEN OTHERS =>
+               WRITE(NEXT; "==> EXCEPTION PROPAGATED STATICALLY");
+ 
+     END ;
+ 
+     IF  FLOW_COUNT /= 29  THEN
+          WRITE(NEXT; "==> INCORRECT FLOW_COUNT VALUE");
+     END IF;
+ 
+     WRITE(NEXT);
+END Main;

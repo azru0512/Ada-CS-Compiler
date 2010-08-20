@@ -1,0 +1,108 @@
+-- $F114B -- adapted from the following ACVC test(s):
+--   B64101A-B.ADA (the code was completely re-written for Ada/CS)
+ 
+-- CHECK THAT THE EXPRESSION CORRESPONDING TO AN OUT OR AN IN OUT
+--   PARAMETER CANNOT BE:
+ 
+--        (A) A CONSTANT, INCLUDING AN IN FORMAL PARAMETER, AN ENUMERATION
+--            LITERAL, OR A LOOP PARAMETER.
+--        (B) A PARENTHESIZED VARIABLE.
+--        (C) A FUNCTION CALL.
+--        (D) AN EXPRESSION CONTAINING AN OPERATOR.
+ 
+PACKAGE MAIN IS
+ 
+BODY
+ 
+     I1,I2     : INTEGER      := 3;
+     E1,E2     : BOOLEAN      := FALSE;
+     CI3       : CONSTANT INTEGER := 3;
+ 
+     PROCEDURE PI1 (X : IN OUT INTEGER) IS
+     BEGIN
+          NULL;
+     END PI1;
+ 
+     PROCEDURE PI2 (X : OUT INTEGER) IS
+     BEGIN
+          NULL;
+     END PI2;
+ 
+     FUNCTION FI RETURN INTEGER IS
+     BEGIN
+          RETURN 1;
+     END FI;
+ 
+ 
+     PROCEDURE PE1 (X : IN OUT BOOLEAN) IS
+     BEGIN
+          NULL;
+     END PE1;
+ 
+     PROCEDURE PE2 (X : OUT BOOLEAN) IS
+     BEGIN
+          NULL;
+     END PE2;
+ 
+     FUNCTION FE RETURN BOOLEAN IS
+     BEGIN
+          RETURN TRUE;
+     END FE;
+ 
+BEGIN
+ 
+     DECLARE
+          PROCEDURE P (X : IN INTEGER) IS
+          BEGIN
+               PI1 (X);       -- ERROR: (A).
+               NULL;
+               PI2 (X);       -- ERROR: (A).
+               NULL;
+          END P;
+     BEGIN
+          NULL;
+     END;
+ 
+     PI1 (CI3);               -- ERROR: (A).
+     NULL;
+     PI2 (CI3);               -- ERROR: (A).
+     NULL;
+     PI1 (3);                 -- ERROR: (A).
+     NULL;
+     PI2 (3);                 -- ERROR: (A).
+     NULL;
+     PE1 (TRUE);              -- ERROR: (A).
+     NULL;
+     PE2 (FALSE);             -- ERROR: (A).
+     NULL;
+     FOR I IN 1..10 LOOP
+          PI1 (I);            -- ERROR: (A).
+          NULL;
+          PI2 (I);            -- ERROR: (A).
+          NULL;
+     END LOOP;
+     NULL;
+ 
+     PI1 ((I1));              -- ERROR: (B).
+     NULL;
+     PI2 ((I1));              -- ERROR: (B).
+     NULL;
+ 
+     PI1 (FI);                -- ERROR: (C).
+     NULL;
+     PI2 (FI);                -- ERROR: (C).
+     NULL;
+     PE1 (FE);                -- ERROR: (C).
+     NULL;
+     PE2 (FE);                -- ERROR: (C).
+ 
+     PI1 (I1 + I2);           -- ERROR: (D).
+     NULL;
+     PI2 (I1 * I2);           -- ERROR: (D).
+     NULL;
+     PE1 (E1 and E2);         -- ERROR: (D).
+     NULL;
+     PE2 (E1 or E2);          -- ERROR: (D).
+     NULL;
+ 
+END Main;

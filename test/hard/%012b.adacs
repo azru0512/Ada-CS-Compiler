@@ -1,0 +1,35 @@
+-- $$012B -- adapted from the following ACVC test(s):
+--   B32202A-B.ADA
+ 
+-- CHECK THAT A REAL NUMBER NAME CANNOT BE USED IN A CONTEXT REQUIRING
+--    AN INTEGER VALUE.
+ 
+PACKAGE Main IS
+BODY BEGIN
+ 
+     DECLARE
+ 
+          I1              :  INTEGER ;
+          PSEUDO_INTEGER  :  CONSTANT  REAL :=  5.0 ;
+ 
+--*       A2  :  INTEGER RANGE 1..PSEUDO_INTEGER ;             -- ERROR:
+          A3  :  CONSTANT INTEGER  := PSEUDO_INTEGER ;         -- ERROR:
+ 
+          FUNCTION  FN RETURN  INTEGER  IS
+          BEGIN
+               RETURN  PSEUDO_INTEGER ;                        -- ERROR:
+          END  FN ;
+ 
+     BEGIN
+ 
+          I1 := PSEUDO_INTEGER ;                               -- ERROR:
+          IF  I1 = PSEUDO_INTEGER  THEN                        -- ERROR:
+               NULL ;
+          END IF;
+          LOOP
+               EXIT WHEN I1 /= Pseudo_integer;                 -- ERROR:
+          END LOOP;
+ 
+     END ;
+ 
+END Main;

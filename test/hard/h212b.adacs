@@ -1,0 +1,38 @@
+-- $H212B -- adapted from the following ACVC test(s):
+--   C52005A-AB.ADA w/ exception parts deleted
+ 
+-- CHECK THAT THE CONSTRAINT_ERROR IS DETECTED AT COMPILE-TIME WHEN A STATIC
+--    EXPRESSION VALUE IS OUTSIDE THE STATIC RANGE OF INTEGER, BOOLEAN,
+--    AND ENUMERATION ASSIGNMENT TARGET VARIABLES.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     DECLARE
+          I1 : INTEGER RANGE 0..10 := 5;
+ 
+     BEGIN
+          I1 := 10;  -- Ok
+          I1 := 11;  -- Error: range error
+     END;
+ 
+     DECLARE
+          B1 : BOOLEAN RANGE TRUE..TRUE;
+ 
+     BEGIN
+          B1 := TRUE;    -- OK
+          B1 := FALSE;   -- Error: range error
+     END;
+ 
+--   DECLARE
+--        TYPE DAY IS (SUN, MON, TUE, WED, THU, FRI, SAT);
+--        WORKDAY : DAY RANGE MON..FRI;
+ 
+--   BEGIN
+--        WORKDAY := TUE;    -- OK
+--        WORKDAY := SUN;    -- Error: range error
+--   END;
+ 
+     WRITE(NEXT);
+END Main;

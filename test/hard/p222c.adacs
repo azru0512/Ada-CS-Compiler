@@ -1,0 +1,173 @@
+-- $P222C -- adapted from the following ACVC test(s):
+--   C67003A-B.ADA
+ 
+-- CHECK THAT THE PREDEFINED OPERATORS FOR THE PREDEFINED
+--   TYPE INTEGER CAN BE REDEFINED.
+-- CHECK THAT THE REDEFINED OPERATOR IS INVOKED WHEN INFIX OR PREFIX
+--   NOTATION IS USED.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     WRITE("Test $P222C:"; NEXT);
+ 
+     DECLARE
+ 
+          -- INTEGER INFIX OPERATORS.
+ 
+          FUNCTION "*" (X, Y : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= Y THEN
+                    RETURN 1;
+               ELSE RETURN 0;
+               END IF;
+          END "*";
+ 
+          FUNCTION "/" (X, Y : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= Y THEN
+                    RETURN 2;
+               ELSE RETURN 0;
+               END IF;
+          END "/";
+     
+          FUNCTION "+" (X, Y : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= Y THEN
+                    RETURN 3;
+               ELSE RETURN 0;
+               END IF;
+          END "+";
+     
+          FUNCTION "-" (X, Y : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= Y THEN
+                    RETURN 4;
+               ELSE RETURN 0;
+               END IF;
+          END "-";
+     
+          FUNCTION "MOD" (X, Y : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= Y THEN
+                    RETURN 6;
+               ELSE RETURN 0;
+               END IF;
+          END "MOD";
+ 
+          FUNCTION "**" (X, Y : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= Y THEN
+                    RETURN 7;
+               ELSE RETURN 0;
+               END IF;
+          END "**";
+ 
+          -- INTEGER PREFIX OPERATORS.
+ 
+          FUNCTION "+" (X : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= 0 THEN
+                    RETURN 8;
+               ELSE RETURN 0;
+               END IF;
+          END "+";
+ 
+          FUNCTION "-" (X : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= 0 THEN
+                    RETURN 9;
+               ELSE RETURN 0;
+               END IF;
+          END "-";
+ 
+          FUNCTION "ABS" (X : INTEGER) RETURN INTEGER IS
+          BEGIN
+               IF X /= 0 THEN
+                    RETURN 10;
+               ELSE RETURN 0;
+               END IF;
+          END "ABS";
+ 
+          -- INTEGER RELATIONAL OPERATORS.
+ 
+          FUNCTION "<" (X, Y : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               RETURN X = Y;
+          END "<";
+ 
+          FUNCTION "<=" (X, Y : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               RETURN X = Y;
+          END "<=";
+ 
+          FUNCTION ">" (X, Y : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               RETURN X = Y;
+          END ">";
+ 
+          FUNCTION ">=" (X, Y : INTEGER) RETURN BOOLEAN IS
+          BEGIN
+               RETURN X = Y;
+          END ">=";
+ 
+     BEGIN
+ 
+          IF 3 * 5 /= 1 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER ""*"" IS DEFECTIVE");
+          END IF;
+ 
+          IF 5 / 1 /= 2 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER ""/"" IS DEFECTIVE");
+          END IF;
+ 
+          IF 1 + 30 /= 3 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER ""+"" IS DEFECTIVE");
+          END IF;
+ 
+          IF 50 - 100 /= 4 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER ""-"" IS DEFECTIVE");
+          END IF;
+ 
+          IF 10 MOD 3 /= 6 THEN
+               WRITE(NEXT; "==> REDEFINITION OF ""MOD"" IS DEFECTIVE");
+          END IF;
+ 
+          IF 3 ** 2 /= 7 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER ""**"" IS DEFECTIVE");
+          END IF;
+ 
+          IF + (10) /= 8 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER UNARY ""+"" IS DEFECTIVE");
+          END IF;
+ 
+          IF - (5) /= 9 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER UNARY ""-"" IS DEFECTIVE");
+          END IF;
+ 
+          IF ABS (2) /= 10 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER ""ABS"" IS DEFECTIVE");
+          END IF;
+ 
+          IF 7 < 8 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER ""<"" IS DEFECTIVE");
+          END IF;
+ 
+          IF 1 <= 5 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER ""<="" IS DEFECTIVE");
+          END IF;
+ 
+          IF 3 > 2 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER "">"" IS DEFECTIVE");
+          END IF;
+ 
+          IF 6 >= 4 THEN
+               WRITE(NEXT; "==> REDEFINITION OF INTEGER "">="" IS DEFECTIVE");
+          END IF;
+ 
+     END;
+ 
+     WRITE(NEXT);
+ 
+END Main;

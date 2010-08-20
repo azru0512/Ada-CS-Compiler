@@ -1,0 +1,28 @@
+-- $I022C -- adapted from Babbage test #20
+ 
+-- -- TEST CONSTANT FOLDING
+-- Show the code you generate
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+    WRITE("Test $I022C:"; NEXT);
+ 
+DECLARE
+    pragma TraceCodeGen;
+    N : CONSTANT INTEGER := 2;
+    M : CONSTANT INTEGER := 5 + N;
+    F1: CONSTANT REAL := 100.0;
+    B1: CONSTANT BOOLEAN := FALSE;
+    B2: CONSTANT BOOLEAN := not B1;
+    A : INTEGER;
+    B : REAL;
+    C : BOOLEAN;
+BEGIN
+    A := 1 + 2 * 3 - 4 * N;
+    B := F1 * F1**2 / (F1 * 2.0);
+    C := B1 and B2 or not B1 and not B2;
+    WRITE("A = ";A;NEXT; " B = ";B;NEXT; " C = ";C;NEXT);
+END;
+ 
+END Main;

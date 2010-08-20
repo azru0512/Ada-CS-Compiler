@@ -1,0 +1,11 @@
+-- Ada/CS scanner test program 7
+pragma ListOn;
+pragma ScanTraceOn;
+-- How good is your error recovery scheme ?
+-- If your scanner can recover from following errors in reasonable ways
+-- you might get some extra credits.
+ 
+100else
+100.45end
+100.200E+qqq;  -- this is a little harder
+BE^GIN;        -- guess what I want

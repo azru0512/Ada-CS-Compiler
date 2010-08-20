@@ -1,0 +1,39 @@
+-- $$511B -- adapted from the following ACVC test(s):
+--   B52002A-B.ADA
+ 
+-- CHECK THAT THE LEFT SIDE OF AN ASSIGNMENT STMT MUST BE A VARIABLE.
+-- "SEMANTICS" VIOLATIONS (CONTEXT-SENSITIVE RESTRICTIONS).
+-- CHECK THAT THE LHS MAY NOT BE A FORM OF A CONSTANT.
+ 
+PACKAGE Main IS
+BODY
+     C1 : CONSTANT INTEGER := 3;
+     C2 : CONSTANT INTEGER := 4;
+     P  : INTEGER;
+     EX : REAL;
+ 
+     FUNCTION F  RETURN INTEGER IS
+     BEGIN
+          RETURN 5;
+     END F;
+ 
+BEGIN
+ 
+     C1 := 6;           -- ERROR: CONSTANT ON LEFT.
+     C2 := 7;           -- ERROR: CONSTANT ON LEFT.
+     F := 3;            -- ERROR: Function on left.
+     B : DECLARE
+ 
+           PROCEDURE P IS
+           BEGIN
+                NULL;
+           END P;
+ 
+         BEGIN
+           EX: BEGIN
+                 EX := 10.0;  -- ERROR: block identifier on left.
+               END EX;
+           P := 10;     -- ERROR: procedure name onleft.
+         END B;
+ 
+END Main;

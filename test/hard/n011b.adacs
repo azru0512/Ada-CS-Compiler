@@ -1,0 +1,70 @@
+-- $N011B -- adapted from the following ACVC test(s):
+--   B51004B-B.ADA
+ 
+-- CHECK THAT LOOP IDENTIFIERS, AND BLOCK IDENTIFIERS ARE
+-- IMPLICITLY DECLARED AT THE END OF THE DECLARATIVE PART.
+-- FOR A NAMED BLOCK NESTED IN A NAMED LOOP, THE LOOP NAME CANNOT BE
+-- USED AS A PREFIX IN AN EXPANDED BLOCK ENTITY.  SUBTESTS ARE:
+--        (A) BLOCK.
+--        (B) PROCEDURE BODY.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     -------------------------------------------------
+ 
+A :  DECLARE
+ 
+     BEGIN     -- A
+ 
+      L : FOR I IN 1..5 LOOP
+ 
+          A1 : DECLARE
+                    X : INTEGER;
+                    TEMP : INTEGER;
+               BEGIN     -- A1
+                    TEMP := A.L.I;                     -- OK.
+                    TEMP := A.L.A1.X;                  -- ERROR:
+                    TEMP := A.A1.X;                    -- OK.
+                    TEMP := L.X;                       -- ERROR:
+                    TEMP := L.A1.X;                    -- ERROR:
+                    TEMP := A1.X;                      -- OK.
+               END A1;
+ 
+          END LOOP L;
+ 
+     END A;
+ 
+     -------------------------------------------------
+ 
+B :  DECLARE
+ 
+--        PROCEDURE P (PARAM : IN OUT INTEGER) IS
+          PROCEDURE P IS
+ 
+          BEGIN     -- P
+ 
+           L : LOOP
+ 
+               B1 : DECLARE
+                         X : INTEGER;
+                         TEMP : INTEGER;
+                    BEGIN     -- B1
+                         TEMP := B1.X;                 -- OK.
+                         TEMP := L.B1.X;               -- ERROR:
+                         TEMP := P.L.B1.X;             -- ERROR:
+                         TEMP := L.X;                  -- ERROR:
+                         TEMP := P.B1.X;               -- OK.
+                         TEMP := B.L.X;                -- ERROR:
+                    END B1;
+ 
+               END LOOP L;
+ 
+          END P;
+ 
+     BEGIN     -- B
+          NULL;
+     END B;
+ 
+END Main;

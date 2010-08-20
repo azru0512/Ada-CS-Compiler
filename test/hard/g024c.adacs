@@ -1,0 +1,98 @@
+-- $G024C -- adapted from the following ACVC test(s):
+--   C54A42E.ADA
+ 
+-- CHECK THAT A  CASE_STATEMENT  CORRECTLY HANDLES A SMALL RANGE OF
+--    POTENTIAL VALUES OF TYPE INTEGER, SITUATED FAR FROM  0  AND
+--    GROUPED INTO A SMALL NUMBER OF ALTERNATIVES.
+ 
+-- (OPTIMIZATION TEST -- BIASED JUMP TABLE.)
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     WRITE("Test $G024C:"; NEXT);
+ 
+     DECLARE
+ 
+          NUMBER  : CONSTANT INTEGER  := 4001 ;
+          LITEXPR : CONSTANT INTEGER  := NUMBER + 5 ;
+--        STATCON : CONSTANT INTEGER RANGE 4000..4010  := 4009 ;
+--        DYNVAR  :          INTEGER RANGE 4000..4010  :=
+--                                                     4010 ;
+--        DYNCON  : CONSTANT INTEGER RANGE 4000..4010  := 4002 ;
+          STATCON : CONSTANT integer := 4009;
+          DYNVAR  : CONSTANT integer := 4010;
+          DYNCON  : CONSTANT integer := 4002;
+ 
+     BEGIN
+ 
+          CASE  INTEGER'VAL(4000)  IS
+               WHEN  4001 | 4004     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F1");
+               WHEN  4009 | 4002     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F2");
+               WHEN  4005            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F3");
+               WHEN  4003 |
+                     4007..4008      =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F4");
+               WHEN  4006            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F5");
+               WHEN  OTHERS          =>  NULL ;
+          END CASE;
+ 
+          CASE  NUMBER  IS
+               WHEN  4001 | 4004     =>  NULL ;
+               WHEN  4009 | 4002     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G2");
+               WHEN  4005            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G3");
+               WHEN  4003 |
+                     4007..4008      =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G4");
+               WHEN  4006            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G5");
+               WHEN  OTHERS          =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G6");
+          END CASE;
+ 
+          CASE  LITEXPR  IS
+               WHEN  4001 | 4004     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H1");
+               WHEN  4009 | 4002     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H2");
+               WHEN  4005            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H3");
+               WHEN  4003 |
+                     4007..4008      =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H4");
+               WHEN  4006            =>  NULL ;
+               WHEN  OTHERS          =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H6");
+          END CASE;
+ 
+          CASE  STATCON  IS
+               WHEN  4001 | 4004     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I1");
+               WHEN  4009 | 4002     =>  NULL ;
+               WHEN  4005            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I3");
+               WHEN  4003 |
+                     4007..4008      =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I4");
+               WHEN  4006            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I5");
+               WHEN  OTHERS          =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I6");
+          END CASE;
+ 
+          CASE  DYNVAR   IS
+               WHEN  4001 | 4004     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J1");
+               WHEN  4009 | 4002     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J2");
+               WHEN  4005            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J3");
+               WHEN  4003 |
+                     4007..4008      =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J4");
+               WHEN  4006            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J5");
+               WHEN  OTHERS          =>  NULL ;
+ 
+          END CASE;
+ 
+          CASE  DYNCON  IS
+               WHEN  4001 | 4004     =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K1");
+               WHEN  4009 | 4002     =>  NULL ;
+               WHEN  4005            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K3");
+               WHEN  4003 |
+                     4007..4008      =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K4");
+               WHEN  4006            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K5");
+               WHEN  OTHERS          =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K6");
+          END CASE;
+ 
+     END ;
+ 
+ 
+     WRITE(NEXT);
+ 
+ 
+END Main;
+ 
