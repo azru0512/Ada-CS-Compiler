@@ -1,0 +1,34 @@
+-- $E012B -- adapted from the following ACVC test(s):
+--   B83C01A-AB.ADA
+ 
+-- CHECK THAT ALL COMPONENT NAMES IN A <COMPONENT_LIST> OF A
+--    RECORD DEFINITION ARE DISTINCT.
+ 
+PACKAGE Main IS
+ 
+     B, C : INTEGER;
+     
+     TYPE  T1  IS
+          RECORD
+               B : INTEGER ; -- Ok
+               C : BOOLEAN ; -- Ok
+               B : INTEGER ; -- ERROR: NAME DUPLICATION  (SAME TYPE)
+               C : INTEGER ; -- ERROR: NAME DUPLICATION  (DIFF. TYPES)
+               D , E ,       -- Ok
+               C ,           -- ERROR: NAME DUPLICATION  (3D OCCURRENCE)
+               F : REAL;
+          END RECORD ;
+ 
+     TYPE  T1B  IS
+          RECORD
+               B : INTEGER ;
+               C : BOOLEAN ;
+               D , E ,
+               F : T1;
+          END RECORD ;       -- CORRECT
+ 
+BODY BEGIN
+ 
+     NULL ;
+ 
+END Main;

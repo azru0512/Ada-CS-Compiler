@@ -1,0 +1,32 @@
+-- $$411B -- adapted from the following ACVC test(s):
+--   B56001A-AB.ADA
+ 
+-- CHECK THAT A NAMED BLOCK CANNOT BE CLOSED WITHOUT MATCHING END ID.
+ 
+ 
+PACKAGE Main IS
+BODY BEGIN
+ 
+     B1 : BEGIN
+          NULL;
+     END B1;                                 -- ERROR: MISSING B1.
+ 
+     B2 : BEGIN
+          NULL;
+     END B1;                                 -- ERROR: B1 NOT B2.
+ 
+     B3 : DECLARE
+     BEGIN
+          NULL;
+     END B3;                                 -- OK.
+ 
+     L1 : DECLARE
+          BEGIN
+               NULL;
+          END L2;                            -- ERROR: L2.
+ 
+     L3 : DECLARE
+          BEGIN NULL;
+          END;                               -- ERROR: MISSING ID.
+ 
+END Main;

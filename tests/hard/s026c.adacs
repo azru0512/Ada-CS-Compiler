@@ -1,0 +1,41 @@
+-- $S026C -- adapted from the following ACVC test(s):
+--   CB4005A-AB.ADA
+ 
+-- CHECK THAT EXCEPTIONS PROPAGATED OUT OF A HANDLER ARE PROPAGATED
+-- OUTSIDE THE ENCLOSING UNIT.
+ 
+PACKAGE Main IS
+ 
+     E , F : EXCEPTION;
+ 
+     B : BOOLEAN := FALSE;
+ 
+BODY
+ 
+     PROCEDURE P IS
+     BEGIN
+          RAISE E;
+     EXCEPTION
+          WHEN F => WRITE(NEXT; "==> WRONG HANDLER 1");
+          WHEN E =>
+               IF B THEN
+                    WRITE(NEXT; "==> WRONG HANDLER 2");
+               ELSE
+                    B := TRUE;
+                    RAISE F;
+               END IF;
+     END P;
+ 
+BEGIN
+     WRITE("Test $S026C:"; NEXT);
+ 
+     BEGIN
+          P;
+          WRITE(NEXT; "==> EXCEPTION NOT PROPAGATED 1");
+     EXCEPTION
+          WHEN F => NULL;
+          WHEN OTHERS => WRITE(NEXT; "==> WRONG HANDLER 3");
+     END;
+ 
+     WRITE(NEXT);
+END Main;

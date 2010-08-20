@@ -1,0 +1,94 @@
+-- $E022C -- adapted from the following ACVC test(s):
+--   C83C01B.ADA
+ 
+-- CHECK THAT COMPONENT NAMES MAY BE THE SAME IN SEPARATE RECORD TYPE
+--    DEFINITIONS, BOTH FOR LOGICALLY NESTED AND NON-NESTED RECORD
+--    TYPES.
+ 
+PACKAGE Main IS
+ 
+     NUMBER : constant INTEGER RANGE 1..23 := 17 ;
+ 
+     TYPE  T1AAAA  IS
+          RECORD
+               A : INTEGER ;
+          END RECORD ;
+ 
+     TYPE  T1AAA  IS
+          RECORD
+               A : T1AAAA ;
+          END RECORD ;
+ 
+     TYPE  T1AA  IS
+          RECORD
+               A : T1AAA ;
+          END RECORD ;
+ 
+     TYPE  T1A  IS
+          RECORD
+               A : T1AA ;
+          END RECORD ;
+ 
+     TYPE  T1  IS
+          RECORD
+               A : T1A ;
+          END RECORD ;
+ 
+ 
+     TYPE  T3AA  IS
+          RECORD
+               A : INTEGER ;
+               B : INTEGER ;
+          END RECORD ;
+ 
+     TYPE  T3AB  IS
+          RECORD
+               A : INTEGER ;
+               B : INTEGER ;
+          END RECORD ;
+ 
+     TYPE  T3A  IS
+          RECORD
+               A : T3AA ;
+               B : T3AB ;
+          END RECORD ;
+ 
+     SUBTYPE  T3B  IS  T3AB ;
+ 
+     TYPE  T3  IS
+          RECORD
+               A : T3A ;
+               B : T3B ;
+          END RECORD ;
+ 
+ 
+     V1 : T1 ;
+     V2 : T1AA ;
+     V  : T1AAA;
+ 
+     V3 : T3 ;
+ 
+BODY BEGIN
+ 
+     WRITE("Test $E022C:"; NEXT);
+ 
+     V1.A.A.A.A.A := 23;
+     V2.A.A.A := 1;
+     V3.A.A.A := 1; V3.A.A.B := 2; V3.A.B.A := 4; V3.A.B.B := 5;
+     V3.B.A := 8;   V3.B.B := 9;
+ 
+     V1.A.A.A.A.A := NUMBER ;
+     V2           := V1.A.A ;
+     V.A.A        := NUMBER ;
+     V3.A.B       := V3.B   ;
+     
+     IF  V2.A.A.A /= NUMBER  OR
+         V2.A /= V  OR
+         V3.A.A.A + V3.A.A.B + V3.A.B.A + V3.A.B.B
+                             + V3.B.A   + V3.B.B    /= 37
+     THEN  WRITE(NEXT; "==> INCORRECT FIELD SELECTION" );
+     END IF;
+ 
+     WRITE(NEXT);
+ 
+END Main;

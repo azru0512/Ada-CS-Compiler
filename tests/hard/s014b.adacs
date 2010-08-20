@@ -1,0 +1,83 @@
+-- $S014B -- adapted from the following ACVC test(s):
+--   BB3001A-B.ADA
+ 
+-- CHECK THAT THE IDENTIFIER MENTIONED IN A RAISE STATEMENT
+--    MUST BE AN EXCEPTION.
+ 
+PACKAGE Main IS
+ 
+     I9 : INTEGER := 9;
+     C9 : REAL := 1.05;
+     B9 : BOOLEAN := FALSE;
+     E1 : EXCEPTION;
+ 
+BODY BEGIN
+ 
+     BEGIN
+          RAISE I9;     -- ERROR: RAISING A NON-EXCEPTION.
+     EXCEPTION
+          WHEN OTHERS =>
+               NULL;
+     END;
+ 
+     BEGIN
+          RAISE C9;     -- ERROR: RAISING A NON-EXCEPTION.
+     EXCEPTION
+          WHEN OTHERS =>
+               NULL;
+     END;
+ 
+     BEGIN
+          RAISE E1;     -- LEGAL RAISE STATEMENT.
+     EXCEPTION
+          WHEN OTHERS =>
+               NULL;
+     END;
+ 
+     BEGIN
+          RAISE B9;     -- ERROR: RAISING A NON-EXCEPTION.
+     EXCEPTION
+          WHEN OTHERS =>
+               NULL;
+     END;
+ 
+     BEGIN
+          RAISE NUMERIC_ERROR; -- LEGAL RAISE STATEMENT.
+     EXCEPTION
+          WHEN OTHERS =>
+               NULL;
+     END;
+ 
+     BEGIN
+          RAISE E;      -- ERROR: E NOT DECLARED.
+     EXCEPTION
+          WHEN OTHERS =>
+               NULL;
+     END;
+ 
+     DECLARE
+ 
+          CONSTRAINT_ERROR,
+          NUMERIC_ERROR,
+          PROGRAM_ERROR,
+          STORAGE_ERROR : INTEGER := 1;
+ 
+     BEGIN
+          -- THE FOLLOWING STATEMENTS ATTEMPT TO RAISE EXCEPTION NAMES
+          -- WHICH HAVE BEEN REDECLARED AS INTEGER.
+ 
+          RAISE CONSTRAINT_ERROR;  -- ERROR: RAISING A NON-EXCEPTION.
+          NULL;
+          RAISE NUMERIC_ERROR;     -- ERROR: RAISING A NON-EXCEPTION.
+          NULL;
+          RAISE PROGRAM_ERROR;      -- ERROR: RAISING A NON-EXCEPTION.
+          NULL;
+          RAISE STORAGE_ERROR;     -- ERROR: RAISING A NON-EXCEPTION.
+          NULL;
+ 
+     EXCEPTION
+          WHEN OTHERS =>
+               NULL;
+     END;
+ 
+END Main;

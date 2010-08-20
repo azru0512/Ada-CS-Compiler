@@ -1,0 +1,40 @@
+-- $B122C -- adapted from Babbage test #34
+ 
+--   GIVEN A PENNY, A NICKEL, AND A DIME, THIS
+--    PROGRAM CALCULATES THE NUMBER OF DISTINCT WAYS
+--    CHANGE CAN BE MADE TOTALLING N CENTS
+--    FOR 1<=N<=15    --
+ 
+PACKAGE Main IS
+ 
+BODY
+ 
+   C : ARRAY (1..3) OF INTEGER;
+   P : ARRAY (1..15) OF INTEGER;
+   N,K : INTEGER;
+ 
+BEGIN
+  WRITE("Test $B122C (w/ output):"; NEXT);
+ 
+  N := 15; K := 3; C(1) := 1; C(2) := 5; C(3) := 10;
+  DECLARE
+   I : INTEGER;
+  Begin
+    FOR I IN 1 .. N LOOP P(I) := 0; END LOOP;
+    FOR I IN 1 .. K LOOP
+      DECLARE
+        J,JP1,M : INTEGER;
+      Begin
+        J := C(I);
+        JP1 := J + 1;
+        P(J) := P(J) + 1;
+        FOR M IN JP1 .. N LOOP
+          P(M) := P(M) + P(M-J);
+        END LOOP;
+      END;
+    END LOOP;
+  END;
+ WRITE(" THE COIN VALUES ARE ";C(1);C(2);C(3);NEXT);
+ FOR K IN 1 .. N LOOP WRITE (K;P(K);NEXT); END LOOP;
+ 
+END Main;

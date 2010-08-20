@@ -1,0 +1,44 @@
+-- $F821C -- adapted from Babbage test #94
+ 
+-- Check string arguments and string-valued functions
+-- CONVERSION FROM GREGORIAN DATE TO WEEKDAY --
+-- SUPPLY 3 INTEGERS: YEAR, MONTH, DAY --
+-- A TEST OF SIMPLE STRING PROCEDURES --
+ 
+PACKAGE Main IS
+ 
+BODY
+ 
+    YR,MO,DY : INTEGER;
+    NDAYS    : ARRAY (1..12) OF RANGE 0..360;
+    SDAY     : ARRAY (1..7) OF STRING;
+ 
+    FUNCTION MODULUS(A,B : INTEGER) RETURN INTEGER IS
+    BEGIN   RETURN(A - (A/B)*B);    END;
+ 
+    FUNCTION WEEKDAY(YEAR,MONTH,DAY : INTEGER) RETURN STRING is
+    BEGIN
+     MONTH := MONTH-2;
+     IF MONTH < 1 THEN MONTH :=MONTH+12; YEAR :=YEAR-1; END IF;
+     -- SINCE THE YEAR ACTUALLY STARTS MARCH 1ST --
+     RETURN(SDAY(MODULUS((
+                 365*YEAR      -- NUMBER OF DAYS SINCE YEAR 0 --
+                 + YEAR/4      -- PLUS LEAP DAYS --
+                 - YEAR/400   -- MINUS 400-YEAR ERROR --
+                 + NDAYS(MONTH)  -- PLUS NUMBER OF DAYS SINCE MAR 1 --
+                 +DAY
+                      ),(7)) + 1) & "DAY");
+    END WEEKDAY;
+ 
+BEGIN
+  WRITE("Test $F821C:"; NEXT);
+ 
+  NDAYS(1):=0;NDAYS(2):=31;NDAYS(3):=61;NDAYS(4):=92;
+  NDAYS(5):=122;NDAYS(6):=153;NDAYS(7):=184;NDAYS(8):=214;
+  NDAYS(9):=245;NDAYS(10):=275;NDAYS(11):=306;NDAYS(12):=337;
+  SDAY(1):="SUN";SDAY(2):="MON";SDAY(3):="TUES";SDAY(4):="WEDNES";
+  SDAY(5):="THURS";SDAY(6):="FRI";SDAY(7):="SATUR";
+  READ(YR,MO,DY);
+  WRITE(MO;"/";DY;"/";YR;"  = ";WEEKDAY(YR,MO,DY));
+ 
+END Main;

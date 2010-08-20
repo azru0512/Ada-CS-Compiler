@@ -1,0 +1,31 @@
+-- $F125C -- adapted from the following ACVC test(s):
+--   C63004A-AB.ADA
+ 
+-- CHECK THAT A PROCEDURE WITHOUT A RETURN STATEMENT RETURNS CORRECTLY.
+ 
+PACKAGE Main IS
+BODY
+ 
+     I    : INTEGER;
+ 
+     PROCEDURE PROC1 (N : IN INTEGER; R : IN OUT INTEGER) IS
+     BEGIN
+          IF (N > 1) THEN
+               PROC1 ((N-1),R);
+               R := R * N;
+          ELSE R := 1;
+          END IF;
+     END PROC1;
+ 
+BEGIN
+ 
+     WRITE("Test $F125C:"; NEXT);
+ 
+     PROC1 (4, I);
+     IF (I /= (4 * 3 * 2)) THEN
+          WRITE(NEXT; "==> INCORRECT RETURN FROM RECURSIVE PROCEDURE PROC1");
+     END IF;
+ 
+     WRITE(NEXT);
+ 
+END Main;

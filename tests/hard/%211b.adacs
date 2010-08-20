@@ -1,0 +1,25 @@
+-- $$211B
+ 
+-- Check typing of predefined operators
+ 
+PACKAGE Main IS
+ 
+     F1: REAL;
+     G1: INTEGER;
+     B1: BOOLEAN;
+ 
+BODY BEGIN
+     F1 := 1.0;
+     G1 := 1;
+     B1 := G1 >= 0;
+     F1 := F1 * G1;      -- ERROR: WRONG TYPES
+     F1 := F1 / G1;      -- ERROR: WRONG TYPES
+     G1 := G1 MOD 1.0;   -- ERROR: WRONG TYPES
+     B1 := NOT G1;       -- ERROR: WRONG TYPES
+     G1 := G1 + B1;      -- ERROR: WRONG TYPES
+     G1 := G1 ** F1;     -- ERROR: WRONG TYPES
+     B1 := F1 /= G1;     -- ERROR: WRONG TYPES
+     F1 := B1 AND ABS G1 >= 3;
+                         -- ERROR: WRONG TYPES
+ 
+END Main;

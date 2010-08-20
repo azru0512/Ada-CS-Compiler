@@ -1,0 +1,68 @@
+-- $Q311B -- adapted from the following ACVC test(s):
+--   B33006A-B.ADA
+ 
+-- CHECK ERROR DETECTION FOR CIRCULAR TYPE DECLARATIONS WITH
+-- PRIVATE TYPES.
+ 
+-- Note: In full Ada, it is allowed that a name is defined in the private
+--       part without being declared as "private" beforehand. (e.g. You
+--       might want to create&use some type/const names in the private part
+--       but not to make them visible outside the package.)
+ 
+PACKAGE Main IS
+ 
+     SUBTYPE POS IS INTEGER RANGE 1 .. 100;
+ 
+     TYPE T0A IS PRIVATE;
+     TYPE T0B IS PRIVATE;
+     TYPE T0C IS PRIVATE;
+ 
+     TYPE T1A IS PRIVATE;
+     TYPE T1B IS PRIVATE;
+ 
+     TYPE T2A IS PRIVATE;
+     TYPE T2B IS PRIVATE;
+ 
+     TYPE T4A IS PRIVATE;
+     TYPE T4B IS PRIVATE;
+     TYPE T4C IS PRIVATE;
+ 
+     TYPE T5 IS PRIVATE;
+ 
+PRIVATE
+ 
+     TYPE T0A IS ARRAY (POS) OF T0B;         -- ALL OKAY DESPITE ORDER.
+     TYPE T0B IS RECORD 
+          C : T0C; 
+     END RECORD;
+     SUBTYPE T0C IS RANGE 1 .. 10;
+ 
+     TYPE T1A IS ARRAY (POS) OF T1B;
+     TYPE T1B IS ARRAY (POS) OF T1A;         -- ERROR: CIRCULAR.
+ 
+     TYPE T2 IS ARRAY (POS)  OF T2A;         -- OKAY.
+     TYPE T2A IS RECORD
+          C1 : T2B;
+     END RECORD;
+ 
+     TYPE T2C IS RECORD
+          C2 : T2A;
+     END RECORD;
+ 
+     TYPE T2B IS RECORD
+          C3 : T2C;                          -- ERROR: CIRCULAR.
+     END RECORD;
+ 
+     TYPE T4A IS ARRAY (BOOLEAN) OF T4B;
+     TYPE T4B IS RECORD
+          C1 : T4C;
+          C2 : INTEGER;
+     END RECORD;
+ 
+     TYPE T4C IS RECORD
+          C5 : T4B;                          -- ERROR: CIRCULAR.
+     END RECORD;
+                                             -- T5 not defined.
+BODY BEGIN
+     NULL;
+END Main;

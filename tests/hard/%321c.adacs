@@ -1,0 +1,41 @@
+-- $$321C
+ 
+-- Check input operations.
+--   Supply your input data as given at the end of this test file.
+ 
+package main is
+ 
+body begin
+ 
+     write("Test $$321C (*):"; next);
+ 
+     declare
+       i, j, k : integer;
+       x, y, z : real;
+       p, q, r : boolean;
+     begin
+       read(x; y; z; next);       -- -5.0  -13.5  67.5
+       if x /= -5.0 or y /= -13.5 or z /= 67.5 then
+          write(next; "==> Error in input (real).");
+       end if;
+ 
+       read(i; j; k; next);       --  10   -4    -2
+       if i /= 010 or j /= -4 or k /= -2 then
+          write(next; "==> Error in input (integer).");
+       end if;
+ 
+       read(p; q; r; next);       -- false true true
+       if p or not q or not r then
+          write(next; "==> Error in input (boolean).");
+       end if;
+ 
+       read(i; j; next);          -- invalid_input exception
+ 
+       write(next; "==> Failed to raise invalid_input exception.");
+     end;
+ 
+end main;
+--  -5.0  -13.5  67.5
+--  10   -4    -2
+--  false true true
+--  true false

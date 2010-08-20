@@ -1,0 +1,34 @@
+-- $R011B -- adapted from the following ACVC test(s):
+--   B84002B-B.ADA
+ 
+-- CHECK THAT THE EFFECT OF "USE P" CAN BE TO MAKE P INVISIBLE.
+-- Check that the effect of "USE" has lowest priority.
+ 
+ 
+          PACKAGE P1 IS
+               P : constant INTEGER := 10;
+               P0: constant BOOLEAN := TRUE;
+          END P1;
+ 
+          PACKAGE P IS
+               P : constant INTEGER := 15;
+               P0: constant BOOLEAN := FALSE;
+          END P;
+ 
+          PACKAGE P2 IS
+               USE P1;
+               A : constant INTEGER := P.P;    -- Ok, 15
+               B : constant INTEGER := P1.P;   -- Ok, 10
+               C : constant BOOLEAN := P0;     -- Ok
+               D : constant INTEGER := P;      -- ERROR, P is package name.
+          END P2;
+ 
+          PACKAGE P4 IS
+               USE P1,P;
+               C : constant BOOLEAN := P0;     -- ERROR: P0 not visible
+          END P4;
+ 
+PACKAGE Main IS
+BODY BEGIN
+     NULL;
+END Main;

@@ -1,0 +1,28 @@
+-- $B012B -- adapted from the following ACVC test(s):
+--   B45261A-AB.ADA
+ 
+-- CHECK THAT THE ORDERING OPERATORS ARE NOT PREDEFINED FOR ARRAY TYPES.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     DECLARE
+ 
+          B      : BOOLEAN := TRUE ;
+ 
+          TYPE  ARR  IS ARRAY (-3..3) OF BOOLEAN ;
+          X , Y  :  ARR ;
+ 
+     BEGIN
+ 
+          IF  X > Y                     -- ERROR: ORDERING NOT AVAILABLE
+          THEN
+               NULL ;
+          END IF;
+ 
+          B := ( X <= Y ) ;             -- ERROR: ORDERING NOT AVAILABLE
+ 
+     END ;
+ 
+END Main;

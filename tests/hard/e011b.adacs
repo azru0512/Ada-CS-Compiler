@@ -1,0 +1,17 @@
+-- $E011B -- adapted from the following ACVC test(s):
+--   B37004G-B.ADA
+ 
+-- CHECK THAT ANONYMOUS RECORD COMPONENTS ARE FORBIDDEN.
+-- According to current Ada/CS grammar, this is OK. 
+ 
+PACKAGE Main IS
+ 
+     SUBTYPE S1 IS INTEGER RANGE 1 .. 1;
+ 
+     TYPE REC IS RECORD
+          C1 : ARRAY (S1) OF S1;        -- ERROR: ANONYMOUS TYPE
+     END RECORD;
+ 
+BODY BEGIN
+     NULL;
+END Main;

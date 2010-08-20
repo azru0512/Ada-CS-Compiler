@@ -1,0 +1,29 @@
+-- $A111B -- adapted from the following ACVC test(s):
+--   B55B01A-AB.ADA
+ 
+-- CHECK THAT A LOOP_PARAMETER CANNOT BE USED AS THE TARGET OF AN
+--   ASSIGNMENT STATEMENT OR AS AN ACTUAL IN OUT OR OUT PARAMETER.
+ 
+PACKAGE Main IS
+ 
+BODY
+ 
+     I1 : INTEGER := 0;
+ 
+     PROCEDURE P ( P1 : OUT INTEGER; P2 : IN OUT INTEGER ) IS
+     BEGIN
+          NULL;
+     END P;
+ 
+BEGIN
+ 
+     FOR I IN 1..10 LOOP
+          I := I1;       -- ERROR: LOOP_PARAMETER USED AS THE TARGET 
+                         --    OF AN ASSIGNMENT STATEMENT.
+          P (I1, I);     -- ERROR: LOOP_PARAMETER USED AS AN IN OUT
+                         --    PARAMETER.
+          P (I, I1);     -- ERROR: LOOP_PARAMETER USED AS AN OUT
+                         --    PARAMETER.
+     END LOOP;
+ 
+END Main;

@@ -1,0 +1,55 @@
+-- $F123C -- adapted from the following ACVC test(s):
+--   C58004C-AB.ADA
+ 
+-- CHECK THAT THE RETURN STATEMENT WORKS FOR RECURSIVE SUBPROGRAMS,
+--    BOTH FUNCTIONS AND PROCEDURES.
+ 
+PACKAGE Main IS
+BODY
+ 
+     I1, I2 : INTEGER := 0;   -- INITIAL VALUE IS IMMATERIAL
+ 
+     PROCEDURE FACTORIALP (IP1 : IN INTEGER; IP2 : IN OUT INTEGER) IS
+ 
+     BEGIN
+          IF IP1 = 1 THEN
+               IP2 := 1;
+               RETURN;
+          ELSE FACTORIALP (IP1 - 1, IP2);
+               IP2 := IP1 * IP2;
+               RETURN;
+          END IF;
+ 
+          IP2 := 0;
+ 
+     END FACTORIALP;
+ 
+     FUNCTION FACTORIALF (IF1 : INTEGER) RETURN INTEGER IS
+ 
+     BEGIN
+          IF IF1 = 1 THEN RETURN (1);
+          END IF;
+ 
+          RETURN (IF1 * FACTORIALF(IF1 - 1) );
+ 
+     END FACTORIALF;
+ 
+BEGIN
+     WRITE("Test $F123C:"; NEXT);
+ 
+     I1 := FACTORIALF (5);
+ 
+     IF I1 /= 120 THEN
+           WRITE(NEXT; "==> RETURN STATEMENT IN RECURSIVE FUNCTION NOT WORKING");
+     END IF;
+ 
+     FACTORIALP (5, I2);
+ 
+     IF I2 = 0 THEN
+          WRITE(NEXT; "==> RETURN STATEMENT IN RECURSIVE PROCEDURE NOT WORKING");
+     ELSIF I2 /= 120 THEN
+          WRITE(NEXT; "==> RETURN STMT IN RECURSIVE PROCEDURE NOT WORKING CORRECTLY");
+     END IF;
+ 
+     WRITE(NEXT);
+END Main;

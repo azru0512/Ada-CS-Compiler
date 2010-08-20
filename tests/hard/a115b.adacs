@@ -1,0 +1,32 @@
+-- $A115B -- adapted from the following ACVC test(s):
+--   B83B02C.ADA
+ 
+-- CHECK THAT INSIDE A LOOP THE LOOP PARAMETER HIDES ANY
+--    IDENTICALLY NAMED IDENTIFIERS IN ENCOMPASSING LOOPS OR BLOCKS.
+ 
+PACKAGE Main IS
+ 
+     I : INTEGER ;
+ 
+BODY BEGIN
+ 
+     FOR  LOOP_PAR  IN  1 .. 10  LOOP
+          FOR  LOOP_PAR IN  false .. true  LOOP
+               I := 8 *
+                    LOOP_PAR ; -- ERROR: ATTEMPT TO ACCESS HIDDEN
+                               --       IDENTIFIER   ( 1)
+          END LOOP;
+     END LOOP;
+ 
+     DECLARE
+          LOOP_PAR : INTEGER ;
+     BEGIN
+          FOR  LOOP_PAR IN  false .. true  LOOP
+               I := 8 *
+                    LOOP_PAR ; -- ERROR: ATTEMPT TO ACCESS HIDDEN
+                               --       IDENTIFIER   ( 2 )
+ 
+          END LOOP;
+     END;
+ 
+END Main;

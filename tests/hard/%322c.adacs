@@ -1,0 +1,37 @@
+-- $$322C
+ 
+-- Check ouput operations.
+ 
+package main is
+ 
+    x, y : real;
+       z : constant real := -3.0;
+ 
+       i : constant integer := -5;
+       k : integer;
+ 
+body
+ 
+    function lessi return boolean is
+    begin
+        return i < 0;
+    end lessi;
+ 
+    function lessj return boolean is
+    begin
+        return i ** k < 0;
+    end lessj;
+ 
+begin
+    write("Test $$322C (w/ output):"; next);
+ 
+    x := -12.0; y := 25e-2;
+    write("  Output:"; x; " times"; y; " ="; x * y; "  which is ";
+          x * y = z; next);
+ 
+    k := 4;
+    write("  Output: Are both"; i; " and "; i ** k; " less than zero ?"; next;
+          "          The answer is "; lessi and lessj; next);
+ 
+ 
+end main;

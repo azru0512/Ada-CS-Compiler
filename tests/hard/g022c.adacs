@@ -1,0 +1,94 @@
+-- $G022C -- adapted from the following ACVC test(s):
+--   C54A42C.ADA
+ 
+-- CHECK THAT A  CASE_STATEMENT  CORRECTLY HANDLES A SPARSE SET OF
+--    POTENTIAL VALUES (OF TYPE INTEGER) IN A LARGE RANGE.
+--    (OPTIMIZATION TEST)
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     WRITE("Test $G022C:"; NEXT);
+ 
+     DECLARE
+ 
+          NUMBER  : CONSTANT  INTEGER := 1001 ;
+          LITEXPR : CONSTANT  INTEGER := NUMBER + 998 ;
+--        STATCON : CONSTANT INTEGER RANGE  1..INTEGER'LAST :=    1000 ;
+--        DYNVAR  :          INTEGER RANGE  1..INTEGER'LAST :=
+--                                          INTEGER'LAST-50 ;
+--        DYNCON  : CONSTANT INTEGER RANGE  1..INTEGER'LAST :=
+--                                          1000 ;
+          STATCON : CONSTANT integer := 1000;
+          DYNVAR  : CONSTANT integer := integer'last - 50;
+          DYNCON  : CONSTANT integer := 1000;
+ 
+     BEGIN
+ 
+          CASE  INTEGER'VAL( NUMBER )  IS
+               WHEN  1 .. 10         =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F1");
+               WHEN  1000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F2");
+               WHEN  2000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F3");
+               WHEN  4000 .. 4100    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F4");
+               WHEN  INTEGER'LAST-100 ..
+                     INTEGER'LAST    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE F5");
+               WHEN  OTHERS          =>  NULL ;
+          END CASE;
+ 
+          CASE   10   IS
+               WHEN  1 .. 10         =>  NULL ;
+               WHEN  1000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G2");
+               WHEN  2000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G3");
+               WHEN  4000 .. 4100    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G4");
+               WHEN  INTEGER'LAST -100 ..
+                     INTEGER'LAST    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G5");
+               WHEN  OTHERS          =>  WRITE(NEXT; "==> WRONG ALTERNATIVE G6");
+          END CASE;
+ 
+          CASE  LITEXPR  IS
+               WHEN  1 .. 10         =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H1");
+               WHEN  1000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H2");
+               WHEN  2000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H3");
+               WHEN  4000 .. 4100    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H4");
+               WHEN  INTEGER'LAST -100 ..
+                     INTEGER'LAST    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE H5");
+               WHEN  OTHERS          =>  NULL ;
+          END CASE;
+ 
+          CASE  STATCON  IS
+               WHEN  1 .. 10         =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I1");
+               WHEN  1000            =>  NULL ;
+               WHEN  2000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I3");
+               WHEN  4000 .. 4100    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I4");
+               WHEN  INTEGER'LAST -100 ..
+                     INTEGER'LAST    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I5");
+               WHEN  OTHERS          =>  WRITE(NEXT; "==> WRONG ALTERNATIVE I6");
+          END CASE;
+ 
+          CASE  DYNVAR   IS
+               WHEN  1 .. 10         =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J1");
+               WHEN  1000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J2");
+               WHEN  2000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J3");
+               WHEN  4000 .. 4100    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J4");
+               WHEN  INTEGER'LAST -100 ..
+                     INTEGER'LAST    =>  NULL ;
+               WHEN  OTHERS          =>  WRITE(NEXT; "==> WRONG ALTERNATIVE J6");
+          END CASE;
+ 
+          CASE  DYNCON  IS
+               WHEN  1 .. 10         =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K1");
+               WHEN  1000            =>  NULL ;
+               WHEN  2000            =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K3");
+               WHEN  4000 .. 4100    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K4");
+               WHEN  INTEGER'LAST -100 ..
+                     INTEGER'LAST    =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K5");
+               WHEN  OTHERS          =>  WRITE(NEXT; "==> WRONG ALTERNATIVE K6");
+          END CASE;
+ 
+     END ;
+ 
+     WRITE(NEXT);
+ 
+END Main;
+ 

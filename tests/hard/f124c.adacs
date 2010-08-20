@@ -1,0 +1,84 @@
+-- $F124C -- adapted from the following ACVC test(s):
+--   C62003A-B.ADA (w/ exception parts removed)
+ 
+-- CHECK THAT SCALAR PARAMETERS ARE COPIED.
+--   SUBTESTS ARE:
+--        (A) SCALAR PARAMETERS TO PROCEDURES.
+--        (B) SCALAR PARAMETERS TO FUNCTIONS.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+     WRITE("Test $F124C:"; NEXT);
+ 
+     --------------------------------------------------
+ 
+     DECLARE  -- (A)
+ 
+          I    : INTEGER;
+ 
+          PROCEDURE P (PI : IN INTEGER;  PO : OUT INTEGER;
+                       PIO : IN OUT INTEGER) IS
+ 
+               TMP  : INTEGER;
+ 
+          BEGIN
+ 
+               TMP := PI;     -- SAVE VALUE OF PI AT PROC ENTRY.
+ 
+               PO := 10;
+               IF (PI /= TMP) THEN
+                    WRITE(NEXT; "==> ASSIGNMENT TO SCALAR OUT PARAMETER CHANGES THE VALUE OF " );
+                    WRITE(NEXT; "    INPUT PARAMETER");
+                    TMP := PI;     -- RESET TMP FOR NEXT CASE.
+               END IF;
+ 
+               PIO := PIO + 100;
+               IF (PI /= TMP) THEN
+                    WRITE(NEXT; "==> ASSIGNMENT TO SCALAR IN OUT PARAMETER CHANGES THE VALUE OF " );
+                    WRITE(NEXT; "    INPUT PARAMETER");
+                    TMP := PI;     -- RESET TMP FOR NEXT CASE.
+               END IF;
+ 
+               I := I + 1;
+               IF (PI /= TMP) THEN
+                    WRITE(NEXT; "==> ASSIGNMENT TO SCALAR ACTUAL PARAMETER CHANGES THE VALUE OF " );
+                    WRITE(NEXT; "    INPUT PARAMETER");
+               END IF;
+          END P;
+ 
+     BEGIN  -- (A)
+          I := 0;   -- INITIALIZE I SO VARIOUS CASES CAN BE DETECTED.
+          P (I, I, I);
+     END;  -- (A)
+ 
+     --------------------------------------------------
+ 
+     DECLARE  -- (B)
+ 
+          I,J  : INTEGER;
+ 
+          FUNCTION F (FI : IN INTEGER) RETURN INTEGER IS
+ 
+               TMP  : INTEGER := FI;
+ 
+          BEGIN
+ 
+               I := I + 1;
+               IF (FI /= TMP) THEN
+                    WRITE(NEXT; "==> ASSIGNMENT TO SCALAR ACTUAL FUNCTION PARAMETER" );
+                    WRITE(NEXT; "    CHANGES THE VALUE OF INPUT PARAMETER");
+               END IF;
+ 
+               RETURN (100);
+          END F;
+ 
+     BEGIN  -- (B)
+          I := 100;
+          J := F(I);
+     END;  -- (B)
+ 
+ 
+     WRITE(NEXT);
+ 
+END Main;

@@ -1,0 +1,50 @@
+-- $$013B -- adapted from the following ACVC test(s):
+--   B44002A-B.ADA
+ 
+-- CHECK THAT NAMES OF TYPES, SUBPROGRAMS, PACKAGES,
+--    BLOCKS, AND LOOPS  ARE NOT PERMITTED AS PRIMARIES.
+ 
+PACKAGE Main IS
+ 
+     A    : INTEGER ;
+ 
+BODY
+ 
+     PROCEDURE  PROC  IS
+     BEGIN
+          NULL ;
+     END PROC ;
+ 
+     FUNCTION  F1 RETURN  INTEGER  IS
+     BEGIN
+          RETURN  17 ;
+     END F1 ;
+ 
+BEGIN
+     BLOCK1 :  BEGIN     NULL;     END BLOCK1 ;
+     A := BLOCK1 ;         -- ERROR: BLOCK IDENTIFIER  AS PRIMARY
+     NULL ;
+     A := BLOCK2 ;         -- ERROR: BLOCK IDENTIFIER  AS PRIMARY (Undef name ?)
+     NULL ;
+     BLOCK2 :  BEGIN     NULL;     END BLOCK2 ;
+ 
+     LOOOP1 :  LOOP     NULL;     END LOOP LOOOP1;
+     A := LOOOP1 ;         -- ERROR: LOOP IDENTIFIER  AS PRIMARY
+     NULL ;
+     A := LOOOP2 ;         -- ERROR: LOOP IDENTIFIER  AS PRIMARY (Undef name ?)
+     NULL ;
+     LOOOP2 :  LOOP     NULL;     END LOOP LOOOP2;
+ 
+     NULL ;
+     A := REAL ;           -- ERROR: TYPE NAME  AS PRIMARY
+     NULL;
+     A := 2 + PROC ;       -- ERROR: PROCEDURE NAME  AS PRIMARY
+     NULL ;
+     A := 3 + F1 ;         -- Ok
+     NULL;
+     F1 := A;              -- ERROR: Function value as L-value
+     NULL ;
+     A := 3 + MAIN ;      -- ERROR: PACKAGE NAME  AS PRIMARY
+     NULL ;
+ 
+END Main;

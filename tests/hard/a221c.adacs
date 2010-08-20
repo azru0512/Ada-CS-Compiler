@@ -1,0 +1,29 @@
+-- $A221C -- adapted from the following ACVC test(s):
+--   C55C02A-AB.ADA
+ 
+-- CHECK THAT WHILE LOOPS WITH FALSE CONDITIONS ARE NEVER EXECUTED.
+ 
+PACKAGE Main IS
+BODY
+ 
+     function NeverTrue return BOOLEAN is
+         I, J : constant INTEGER range 1 .. 10 := 5;
+     begin
+         return I /= J;
+     end;
+ 
+BEGIN
+     WRITE("Test $A221C:"; NEXT);
+ 
+     WHILE FALSE LOOP
+          WRITE(NEXT; "==> STATIC FALSE WHILE LOOP ENTERED");
+          EXIT;
+     END LOOP;
+ 
+     WHILE NeverTrue LOOP
+          WRITE(NEXT; "==> DYNAMIC FALSE WHILE LOOP ENTERED");
+          EXIT;
+     END LOOP;
+ 
+     WRITE(NEXT);
+END Main;

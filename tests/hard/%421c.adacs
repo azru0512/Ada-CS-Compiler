@@ -1,0 +1,120 @@
+-- $$421C -- adapted from the following ACVC test(s):
+--   C56002A-AB.ADA
+ 
+-- CHECK THAT BLOCKS CAN HAVE DECLARATIVE PARTS AND THAT
+--    THE EFFECT OF THESE DECLARATIONS IS LIMITED TO THE BLOCKS
+--    IN WHICH THEY OCCUR.
+-- Also check the exact scope of declarations in nested blocks.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+     WRITE("Test $$421C:"; NEXT);
+ 
+     DECLARE
+ 
+          X, Y , Z:  CONSTANT INTEGER := 100;
+ 
+          FIRST, SECOND  :  INTEGER ;
+          THIRD   :  CONSTANT INTEGER :=  3 ;
+          FOURTH  :  CONSTANT INTEGER :=  4 ;
+          FIFTH   :  CONSTANT INTEGER :=  5 ;
+          TENTH   :  CONSTANT INTEGER := 10 ;
+          ZEROTH  :  CONSTANT INTEGER :=  0 ;
+ 
+     BEGIN
+          IF X/= 100 OR Y /= 100 OR Z /= 100 
+          THEN
+               WRITE(NEXT; "==> Wrong values - 0");
+          END IF;
+ 
+          FIRST := 1;   SECOND := 2;
+          IF   FIRST   /= 1  OR
+               SECOND  /= 2  OR
+               THIRD   /= 3  OR
+               FOURTH  /= 4  OR
+               FIFTH   /= 5  OR
+               TENTH   /=10  OR
+               ZEROTH  /= 0
+          THEN
+               WRITE(NEXT; "==> WRONG VALUES  -  1" );
+          END IF;
+ 
+          DECLARE
+ 
+               FIRST   :  CONSTANT BOOLEAN := TRUE ;
+               SECOND  :  CONSTANT BOOLEAN := THIRD mod 2 = 0 ;
+               THIRD   :  CONSTANT BOOLEAN := not SECOND ;
+               FOURTH  :  CONSTANT BOOLEAN := FALSE ;
+               FIFTH   :  CONSTANT BOOLEAN := FIRST and THIRD ;
+               TENTH   :  CONSTANT BOOLEAN := FOURTH or ZEROTH ** 0 <= 0 ;
+               ZEROTH  :  CONSTANT BOOLEAN := TENTH ;
+ 
+          BEGIN
+ 
+               IF   FIRST   /= TRUE  OR
+                    SECOND  /= FALSE  OR
+                    THIRD   /= TRUE  OR
+                    FOURTH  /= FALSE OR
+                    not FIFTH OR
+                    TENTH     OR
+                    ZEROTH
+               THEN
+                    WRITE(NEXT; "==> WRONG VALUES  -  2" );
+               END IF;
+ 
+          END ;
+ 
+          IF   FIRST   /= 1  OR
+               SECOND  /= 2  OR
+               THIRD   /= 3  OR
+               FOURTH  /= 4  OR
+               FIFTH   /= 5  OR
+               TENTH   /=10  OR
+               ZEROTH  /= 0
+          THEN
+               WRITE(NEXT; "==> WRONG VALUES  -  3" );
+          END IF;
+ 
+          DECLARE
+ 
+               FIRST   :  CONSTANT REAL := 32765.23453 ** ZEROTH ;
+               SECOND  :  CONSTANT REAL := 2.00000 ;
+               THIRD   :  CONSTANT REAL := 0.3e1 ;
+               FOURTH  :  CONSTANT REAL := 4000e-3 ;
+               FIFTH   :  CONSTANT REAL := FIRST + FOURTH;
+               TENTH   :  CONSTANT REAL := SECOND * FIFTH;
+               ZEROTH  :  CONSTANT REAL := THIRD - THIRD;
+ 
+          BEGIN
+ 
+               IF   FIRST   /=  1.0   OR
+                    SECOND  /=  2.0   OR
+                    THIRD   /=  3.0   OR
+                    FOURTH  /=  4.0   OR
+                    FIFTH   /=  5.0   OR
+                    TENTH   /=  10.0  OR
+                    ZEROTH  /=  0.0 
+               THEN
+                    WRITE(NEXT; "==> WRONG VALUES  -  4" );
+               END IF;
+ 
+          END ;
+ 
+          IF   FIRST   /= 1  OR
+               SECOND  /= 2  OR
+               THIRD   /= 3  OR
+               FOURTH  /= 4  OR
+               FIFTH   /= 5  OR
+               TENTH   /=10  OR
+               ZEROTH  /= 0
+          THEN
+               WRITE(NEXT; "==> WRONG VALUES  -  5" );
+          END IF;
+ 
+     END ;
+ 
+     WRITE(NEXT);
+ 
+END Main;

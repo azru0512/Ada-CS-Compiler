@@ -1,0 +1,22 @@
+-- $J323C -- adapted from the following ACVC test(s):
+--   C37008B-B.ADA
+ 
+-- CHECK THAT NO CONSTRAINT ERROR IS RAISED FOR AN UNUSED TYPE
+-- DECLARATION WITH AN INVALID DEFAULT VALUE
+ 
+PACKAGE Main IS
+BODY BEGIN
+     WRITE("Test $J323C:");  WRITE(NEXT);
+ 
+     BEGIN
+          DECLARE
+               TYPE R1 IS RECORD
+                    C1 : INTEGER RANGE 1 .. 5 := 0;
+               END RECORD;
+          BEGIN
+               NULL;
+          END;
+     END;
+ 
+     WRITE(NEXT);
+END Main;

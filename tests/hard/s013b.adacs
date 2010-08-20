@@ -1,0 +1,48 @@
+-- $S013B -- adapted from the following ACVC test(s):
+--   BB2002A-AB.ADA
+ 
+-- CHECK THAT AN EXCEPTION CANNOT BE REFERRED TO MORE THAN ONCE
+--    IN A SINGLE HANDLER OR A SEQUENCE OF HANDLERS.
+ 
+PACKAGE Main IS
+ 
+     I1 : INTEGER;
+ 
+BODY 
+ 
+     PROCEDURE P IS
+          SINGULAR : EXCEPTION;
+          PLURAL   : EXCEPTION;
+          I1 : INTEGER;
+     BEGIN
+          I1 := 1;
+     EXCEPTION
+          WHEN SINGULAR =>
+               NULL;
+          WHEN PLURAL |
+                 CONSTRAINT_ERROR |
+                 PLURAL =>           -- ERROR: EXCEPTION USED TWICE IN 
+                                     -- HANDLER.
+               NULL;
+          WHEN SINGULAR =>           -- ERROR: 2ND HANDLER FOR SINGULAR.
+               NULL;
+     END P;
+ 
+BEGIN
+     I1 := 2;
+EXCEPTION
+     WHEN CONSTRAINT_ERROR =>
+          NULL;
+     WHEN NUMERIC_ERROR |
+            NUMERIC_ERROR  =>        -- ERROR: EXCEPTION USED TWICE IN 
+                                     -- HANDLER.
+          NULL;
+     WHEN STORAGE_ERROR =>
+          NULL;
+     WHEN CONSTRAINT_ERROR =>        -- ERROR: 2ND HANDLER FOR
+                                     -- CONSTRAINT_ERROR.
+          NULL;
+     WHEN STORAGE_ERROR =>           -- ERROR: 2ND HANDLER FOR
+                                     -- STORAGE_ERROR.
+          NULL;
+END Main;

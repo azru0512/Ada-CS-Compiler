@@ -1,0 +1,36 @@
+-- $H121C -- #89
+ 
+-- Run-time range checks     
+ 
+PACKAGE Main IS
+ 
+    N, M : INTEGER;
+ 
+BODY BEGIN
+    WRITE("Test $H121C(*):"; NEXT);
+ 
+    N := 0;  M := 20;
+ 
+DECLARE
+ 
+    SUBTYPE T  IS RANGE N .. M;               -- 0 .. 20
+    SUBTYPE T1 IS T  RANGE T'FIRST .. 10;     -- 0 .. 10
+    SUBTYPE T2 IS T1 RANGE 5 .. T1'LAST;      -- 5 .. 10
+    SUBTYPE T3 IS RANGE T1'LAST .. T'LAST;    --10 .. 20
+    SUBTYPE T4 IS T3 RANGE 15 .. 20;          --15 .. 20
+    A : T2;
+    B : T1;
+    C : T4;
+    D : T3;
+ 
+BEGIN
+    A := 5;  B := 10;  C := 18;   D := 10;  -- OK
+    A := A + 4;                             -- OK
+    B := B - 3;                             -- OK
+    C := A+B;                               -- OK
+    D := C-A+2;                             -- OOPs
+ 
+    WRITE("==> Error in run-time range checks"; NEXT);
+END;
+ 
+END Main;

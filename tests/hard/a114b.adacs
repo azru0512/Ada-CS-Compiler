@@ -1,0 +1,19 @@
+-- $A114B -- adapted from the following ACVC test(s):
+--   B83B01A-AB.ADA
+ 
+-- CHECK THAT THE VALUE OF A LOOP PARAMETER CAN NOT BE ACCESSED
+--    FROM OUTSIDE THE BODY OF THE LOOP.
+ 
+PACKAGE Main IS
+ 
+     I : INTEGER ;
+ 
+BODY BEGIN
+ 
+     FOR  LOOP_PAR  IN  1 .. 10  LOOP
+          NULL;
+     END LOOP;
+ 
+     I := LOOP_PAR ; -- ERROR: 'LOOP_PAR' UNKNOWN OUTSIDE THE LOOP
+ 
+END Main;

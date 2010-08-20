@@ -1,0 +1,40 @@
+-- $E021C -- adapted from the following ACVC test(s):
+--   C37012A-AB.ADA
+ 
+-- CHECK THAT A RECORD CAN BE DECLARED WITH NO VARIANT PART, OR CAN BE NULL
+-- Check record assignment and comparison
+ 
+PACKAGE Main IS
+BODY BEGIN
+     WRITE("Test $E021C:");  WRITE(NEXT);
+ 
+     DECLARE
+          TYPE R1 IS RECORD
+               C : BOOLEAN;
+               R2: INTEGER;
+          END RECORD;
+ 
+          TYPE R2 IS RECORD
+               NULL;
+          END RECORD;
+ 
+          A,B : R1;
+          C,D : R2;
+         
+     BEGIN
+          A.C := true;  B.C := false;
+          IF A = B
+          OR C /= D
+          THEN
+               WRITE(NEXT);
+               WRITE("==> IMPROPER RECORD VALUES");
+          END IF;
+ 
+          A := B;
+          IF A /= B THEN
+               WRITE(NEXT; "==> improper record assignment");
+          END IF;
+     END;
+ 
+     WRITE(NEXT);
+END Main;

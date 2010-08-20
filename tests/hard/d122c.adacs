@@ -1,0 +1,79 @@
+-- $D122C  -- adapted from old Babbage test #92
+ 
+--  Check basic string operations.
+--  Please supply an input string of given syntax as test data.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+  WRITE("Test $D122C (w/ string I/O):"; NEXT);
+ 
+-- THIS PROGRAM CONVERTS INFIX EXPRESSIONS INTO
+-- POLISH POSTFIX, USING RECURSIVE NESTED
+-- PROCEDURES.  READ IN AN INFIX STRING,
+-- (USING ONLY +,-,*, AND PARENTHESES)
+-- TERMINATED BY TWO PERIODS.
+-- FOR EXAMPLE: 'A+(B*(C-D)*B+F)*H..'
+ 
+DECLARE
+  CH,INSTRING,POST : STRING;
+ 
+  PROCEDURE FIND IS
+  BEGIN
+  FIND:LOOP
+     CH := SUBSTR(INSTRING,1,1);
+     INSTRING := SUBSTR(INSTRING,2,INSTRING'LEN-1);
+     EXIT FIND WHEN CH /= ' ';
+    END LOOP FIND;
+  END;
+ 
+  PROCEDURE EXPR IS
+     OP : STRING;
+ 
+     PROCEDURE TERM IS
+ 
+         PROCEDURE FACT IS
+         BEGIN
+             IF CH = "("
+               THEN FIND; EXPR;
+               ELSE POST := POST & CH;
+             END IF;
+             FIND;
+         END FACT;
+ 
+     BEGIN -- TERM
+           FACT;
+     STAR:LOOP
+            EXIT STAR WHEN CH /= "*";
+            FIND;
+            FACT;
+            POST := POST & "*";
+         END LOOP STAR;
+     END TERM;
+ 
+  BEGIN  -- EXPR
+        TERM;
+  PLUS:LOOP
+        EXIT PLUS WHEN NOT((CH = "+") OR (CH = "-"));
+        OP := CH;
+        FIND;
+        TERM;
+        POST := POST & OP;
+        END LOOP PLUS;
+  END EXPR;
+ 
+BEGIN
+    READ(INSTRING);
+    WRITE("THE STRING IN INFIX: ";INSTRING;NEXT);
+    POST := " ";
+    FIND;
+    BIG:LOOP
+        EXPR;
+        EXIT BIG WHEN CH = ".'"
+        END LOOP BIG;
+    WRITE("THE STRING IN POSTFIX:";POST);
+    WRITE(NEXT);
+END ;
+ 
+END Main;

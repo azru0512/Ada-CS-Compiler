@@ -1,0 +1,16 @@
+-- $S011B -- adapted from the following ACVC test(s):
+--   B44002C.ADA
+ 
+-- CHECK THAT NAMES OF EXCEPTIONS ARE NOT PERMITTED AS PRIMARIES.
+ 
+PACKAGE Main IS
+ 
+     EXC1 : EXCEPTION ;
+     A    : INTEGER ;
+ 
+BODY BEGIN
+ 
+     A := EXC1 ;   -- ERROR: NAMES OF EXCEPTIONS ARE NOT PERMITTED AS
+                   --    PRIMARIES
+ 
+END Main;

@@ -1,0 +1,32 @@
+-- $F128C -- adapted from Babbage test #65
+ 
+-- LET'S SEE WHAT HAPPENS WITH FUNCTIONS IN ARGUMENT LISTS --
+ 
+PACKAGE Main IS
+ 
+BODY
+  A,B,C : INTEGER;
+ 
+  FUNCTION F(I : INTEGER) RETURN INTEGER IS
+  BEGIN
+    RETURN  I*I;
+  END;
+ 
+  FUNCTION G(I,J : INTEGER) RETURN INTEGER IS
+  BEGIN
+    RETURN I*J;
+  END;
+ 
+BEGIN
+    WRITE("Test $F128C:"; NEXT);
+ 
+    A := 10; B := 5; C := 3;
+    IF F(F(B)) /= 625 OR
+       G(A, F(A)) /= 1000 OR
+       F(F(F(F(C)))) /= 43046721
+    THEN
+       WRITE("==> Error when functions in argument lists"; NEXT);
+    END IF;
+ 
+    WRITE(NEXT);
+END Main;

@@ -1,0 +1,26 @@
+-- $L123C -- adapted from Babbage test #102
+ 
+-- ENUMERATIONS FOR LATE AT NIGHT --
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+    WRITE("Test $L123C:"; NEXT);
+    DECLARE
+        TYPE BEER IS ( MILLER, BUD, TOPPER, PABST );
+        -- ANYONE REMEMBER TOPPER? --
+        BAR0 : CONSTANT BEER := PABST;
+        BAR1, BAR2, BARNONE : BEER;
+    BEGIN
+      BAR1 := MILLER;
+      BAR2 := BUD;
+      BARNONE := TOPPER;
+      IF NOT ( BAR0 > BARNONE and BARNONE > BAR2 and BAR2 > BAR1)
+      THEN
+          WRITE(NEXT; "==> Error in enumeratiion type operations");
+      END IF;
+    END ;
+ 
+    WRITE(NEXT);
+END Main;

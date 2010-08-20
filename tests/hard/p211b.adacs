@@ -1,0 +1,364 @@
+-- $P211B -- adapted from the following ACVC test(s):
+--   B67001A-B.ADA (IN, XOR, ..., and subtest G removed)
+ 
+-- CHECK THAT CERTAIN FUNCTION DECLARATIONS WITH
+--  OPERATOR SYMBOLS ARE NOT ALLOWED.  IN
+--  PARTICULAR, THE FOLLOWING SUBTESTS ARE
+--  PERFORMED:
+--     (A)  CHECK THAT "AND THEN",
+--          "OR ELSE", "/=", AND ":=" ARE NOT
+--          PERMITTED AS OPERATOR SYMBOLS.
+--     (B)  CHECK THAT FUNCTIONS FOR "AND", "OR",
+--          "=", "<=", "<", ">=", ">", "&",
+--          "*", "/", "MOD", AND "**" CANNOT
+--          BE DECLARED WITH ONE PARAMETER.
+--     (C)  CHECK THAT THE SAME OPERATOR SYMBOLS
+--          AS LISTED IN (B) CANNOT BE DECLARED
+--          AS FUNCTIONS WITH THREE PARAMETERS.
+--     (D)  CHECK THAT FUNCTIONS FOR "NOT" AND "ABS" CANNOT
+--          BE DECLARED WITH TWO PARAMETERS.
+--     (E)  CHECK THAT FUNCTIONS FOR "+" AND "-" CANNOT BE
+--          DECLARED WITH ZERO PARAMETERS.
+--     (F)  CHECK THAT FUNCTIONS FOR "+" AND "-"
+--          CANNOT BE DECLARED WITH THREE PARAMETERS.
+ 
+PACKAGE Main IS
+ 
+     SUBTYPE LIM_PRIV IS INTEGER;   -- Should be limited private type
+ 
+BODY BEGIN
+ 
+     --------------------------------------------------
+ 
+     DECLARE -- (A)
+ 
+          FUNCTION "IN" (I1, I2, I3 : INTEGER)        -- ERROR: IN
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "IN";
+ 
+          FUNCTION "NOT IN" (I1, I2, I3 : INTEGER)    -- ERROR: NOT IN
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "NOT IN";
+ 
+          FUNCTION "AND THEN" (B1, B2 : BOOLEAN)      -- ERROR: AND THEN
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "AND THEN";
+ 
+          FUNCTION "OR ELSE" (B1, B2 : BOOLEAN)       -- ERROR: OR ELSE
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "OR ELSE";
+ 
+          FUNCTION "/=" (I1, I2: LIM_PRIV)            -- ERROR: /=
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "/=";
+ 
+          PROCEDURE ":=" (I1 : OUT LIM_PRIV; I2 : LIM_PRIV) IS-- ERROR: :=
+          BEGIN
+               NULL;
+          END ":=";
+ 
+     BEGIN -- (A)
+          NULL;
+     END; -- (A)
+ 
+     --------------------------------------------------
+ 
+     DECLARE -- (B)
+ 
+          FUNCTION "AND" (B1 : BOOLEAN)               -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "AND";
+ 
+          FUNCTION "OR" (B1 : BOOLEAN)                -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "OR";
+ 
+          FUNCTION "XOR" (B1 : BOOLEAN)               -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "XOR";
+ 
+          FUNCTION "=" (B1 : LIM_PRIV)                -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "=";
+ 
+          FUNCTION "<=" (B1 : BOOLEAN)                -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "<=";
+ 
+          FUNCTION "<" (B1 : BOOLEAN)                 -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "<";
+ 
+          FUNCTION ">=" (B1 : BOOLEAN)                -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END ">=";
+ 
+          FUNCTION ">" (B1 : BOOLEAN)                 -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END ">";
+ 
+          FUNCTION "&" (B1 : BOOLEAN)                 -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "&";
+ 
+          FUNCTION "*" (B1 : BOOLEAN)                 -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "*";
+ 
+          FUNCTION "/" (B1 : BOOLEAN)                 -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "/";
+ 
+          FUNCTION "MOD" (B1 : BOOLEAN)               -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "MOD";
+ 
+          FUNCTION "REM" (B1 : BOOLEAN)               -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "REM";
+ 
+          FUNCTION "**" (B1 : BOOLEAN)                -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "**";
+ 
+     BEGIN -- (B)
+          NULL;
+     END; -- (B)
+ 
+     --------------------------------------------------
+ 
+     DECLARE -- (C)
+ 
+          FUNCTION "AND" (B1, B2, B3 : BOOLEAN)       -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "AND";
+ 
+          FUNCTION "OR" (B1, B2, B3: BOOLEAN)         -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "OR";
+ 
+          FUNCTION "XOR" (B1, B2, B3 : BOOLEAN)       -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "XOR";
+ 
+          FUNCTION "=" (B1, B2, B3 : LIM_PRIV)        -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "=";
+ 
+          FUNCTION "<=" (B1, B2, B3 : BOOLEAN)        -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "<=";
+ 
+          FUNCTION "<" (B1, B2, B3 : BOOLEAN)         -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "<";
+ 
+          FUNCTION ">=" (B1, B2, B3 : BOOLEAN)        -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END ">=";
+ 
+          FUNCTION ">" (B1, B2, B3 : BOOLEAN)         -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END ">";
+ 
+          FUNCTION "&" (B1, B2, B3 : BOOLEAN)         -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "&";
+ 
+          FUNCTION "*" (B1, B2, B3 : BOOLEAN)         -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "*";
+ 
+          FUNCTION "/" (B1, B2, B3 : BOOLEAN)         -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "/";
+ 
+          FUNCTION "MOD" (B1, B2, B3 : BOOLEAN)       -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "MOD";
+ 
+          FUNCTION "REM" (B1, B2, B3 : BOOLEAN)       -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "REM";
+ 
+          FUNCTION "**" (B1, B2, B3 : BOOLEAN)        -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "**";
+ 
+     BEGIN -- (C)
+          NULL;
+     END; -- (C)
+ 
+     ---------------------------------------------------
+ 
+     DECLARE -- (D)
+ 
+          FUNCTION "NOT" (B1, B2 : BOOLEAN)           -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN BOOLEAN IS
+          BEGIN
+               RETURN TRUE;
+          END "NOT";
+ 
+          FUNCTION "ABS" (I1, I2 : INTEGER)           -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN INTEGER IS
+          BEGIN
+               RETURN 3;
+          END "ABS";
+ 
+     BEGIN -- (D)
+          NULL;
+     END; -- (D)
+ 
+     --------------------------------------------------
+ 
+     DECLARE -- (E)
+ 
+          FUNCTION "+" RETURN INTEGER IS              -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+          BEGIN
+               RETURN 0;
+          END "+";
+ 
+          FUNCTION "-" RETURN INTEGER IS              -- ERROR: TOO FEW
+                                                      -- PARAMETERS.
+          BEGIN
+               RETURN 0;
+          END "-";
+ 
+     BEGIN -- (E)
+          NULL;
+     END; -- (E)
+ 
+     --------------------------------------------------
+ 
+     DECLARE -- (F)
+ 
+          FUNCTION "+" (I1, I2, I3 : INTEGER)         -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+               RETURN INTEGER IS
+          BEGIN
+               RETURN 0;
+          END "+";
+ 
+          FUNCTION "-" (I1, I2, I3 : INTEGER)         -- ERROR: TOO MANY
+                                                      -- PARAMETERS.
+                RETURN INTEGER IS
+          BEGIN
+               RETURN 0;
+          END "-";
+ 
+     BEGIN -- (F)
+          NULL;
+     END; -- (F)
+ 
+     --------------------------------------------------
+ 
+     DECLARE -- (G)
+ 
+          FUNCTION "+" (I1, I2: INTEGER )
+               RETURN INTEGER IS
+          BEGIN
+               RETURN 0;
+          END "+";
+ 
+     BEGIN -- (G)
+          NULL;
+     END; -- (G)
+ 
+END Main;

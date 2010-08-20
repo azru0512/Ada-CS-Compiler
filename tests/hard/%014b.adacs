@@ -1,0 +1,72 @@
+-- $$014B -- adapted from the following ACVC test(s):
+--   B51004C-B.ADA
+ 
+-- CHECK THAT LOOP IDENTIFIERS, AND BLOCK IDENTIFIERS ARE
+--    IMPLICITLY DECLARED AT THE END OF THE DECLARATIVE PART.
+--    IDENTIFIERS DECLARED AS VARIABLES IN OUTER SCOPES ARE HENCE 
+--    HIDDEN.  SUBTESTS ARE:
+--        (A)  BLOCK.
+--        (B)  PROCEDURE BODY.
+ 
+PACKAGE Main IS
+ 
+BODY BEGIN
+ 
+OUTER:
+     DECLARE
+ 
+          IDN1, IDN2, IDN3 : INTEGER;
+ 
+     BEGIN     -- OUTER
+ 
+     A :  DECLARE
+ 
+               TEMP : INTEGER;
+ 
+          BEGIN     -- A
+               
+                         TEMP := 0;
+                         IDN2 := 2;          -- ERROR: LABEL IDN2
+                                             -- IN SCOPE.
+ 
+                  IDN2 : LOOP
+                              TEMP := 0;
+                         END LOOP IDN2;
+ 
+                  IDN3 : BEGIN
+                              IDN3 := 3;     -- ERROR: LABEL IDN3
+                         END IDN3;           -- IN SCOPE.
+          
+          END A;
+ 
+     ---------------------------------------------------
+ 
+     B :  DECLARE
+ 
+               TEMP : INTEGER;
+ 
+               PROCEDURE P IS
+               BEGIN
+                         TEMP := 0;
+                         IDN1 := 1;
+ 
+                  IDN2 : LOOP
+                              IDN2 := 2;     -- ERROR: LABEL IDN2
+                         END LOOP IDN2;      -- IN SCOPE.
+ 
+                         IDN3 := 3;          -- ERROR: LABEL IDN3
+                                             -- IN SCOPE.
+                  IDN3 : DECLARE
+                         BEGIN
+                              TEMP := 0;
+                         END IDN3;
+ 
+               END P;
+ 
+          BEGIN     -- B
+               NULL;
+          END B;
+ 
+     END OUTER;
+ 
+END Main;

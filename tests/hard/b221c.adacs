@@ -1,0 +1,27 @@
+-- $B221C -- adapted from Babbage test #36
+ 
+-- SOME FUN WITH A TWO-DIMENSIONAL ARRAY --
+-- 3,4;5,6;3,4;5,6;7 --
+ 
+PACKAGE Main IS
+ 
+BODY
+       I,J : INTEGER;
+       A   : ARRAY (1..5,1..5) OF INTEGER;
+BEGIN
+   WRITE("Test $B221C (w/ output):"; NEXT);
+ 
+   I:=1;
+   J:=2;
+   A(I,J):=3;
+   A(I+1,J+1):=4;
+   WRITE(A(1,2);A(2,3);NEXT);
+   A(A(1,2),A(2,3)):=5;
+   A(A(I+1,J+1),A(2,3)-A(1,2)):=6;
+   WRITE(A(3,4);A(4,1);NEXT);
+   A(A(A(1,2),A(2,3)),5):=7;
+   WRITE("A(1,2)=";A(1,2);"   A(2,3)=";A(2,3);NEXT);
+   WRITE("A(3,4)=";A(3,4);"   A(4,1)=";A(4,1);NEXT);
+   WRITE("A(5,5)=";A(5,5);NEXT);
+ 
+END Main;

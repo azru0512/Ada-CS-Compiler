@@ -1,0 +1,62 @@
+-- $E013B -- adapted from the following ACVC test(s):
+--   B83C02A.ADA
+ 
+-- CHECK THAT PL/1-STYLE PARTIAL NAMES FOR LOGICALLY NESTED RECORD
+--    COMPONENTS ARE NOT PERMITTED.
+ 
+PACKAGE Main IS
+ 
+     F , V  :  INTEGER ;
+ 
+     TYPE  R1AAA  IS
+          RECORD
+               E , F , G : INTEGER ;
+          END RECORD ;
+ 
+     TYPE  R1AAB  IS
+          RECORD
+               T : INTEGER ;
+          END RECORD ;
+ 
+     TYPE  R1AA  IS
+          RECORD
+               R : R1AAA ;
+               S : R1AAB ;
+          END RECORD ;
+ 
+     TYPE  R1A  IS
+          RECORD
+               P  : INTEGER ;
+               OH : R1AA ;
+          END RECORD ;
+ 
+     TYPE  R1  IS
+          RECORD
+               N : INTEGER ;
+               M : R1A ;
+          END RECORD ;
+ 
+     A : R1 ;
+ 
+BODY BEGIN
+ 
+     A.M.OH.S.T := 0;   -- Ok
+ 
+     V := A.M.OH.S ;    -- ERROR: INCOMPLETE NAME (ALTHOUGH  S  HAS
+                        --    ONLY 1 COMPONENT, AND, FURTHERMORE, THAT
+                        --    COMPONENT HAS MATCHING TYPE)
+ 
+     V := A.E ;         -- ERROR: INCOMPLETE NAME (FIRST & LAST PARTS)
+ 
+     V := A.M.OH.R.E ;  -- CORRECT REFERENCE
+     V :=   M.OH.R.E ;  -- ERROR: INCOMPLETE NAME (ONLY LAST 4 PARTS)
+     V :=     OH.R.E ;  -- ERROR: INCOMPLETE NAME (ONLY LAST 3 PARTS)
+     V :=        R.E ;  -- ERROR: INCOMPLETE NAME (ONLY LAST 2 PARTS)
+     V :=          E ;  -- ERROR: INCOMPLETE NAME (ONLY LAST PART)
+ 
+     V :=          F ;  -- CORRECT REFERENCE TO TOP-LEVEL VARIABLE
+ 
+     V := A.R.E ;       -- ERROR: INCOMPLETE NAME (1,4,5)
+     V := A.M.E ;       -- ERROR: INCOMPLETE NAME (1,2,5)
+ 
+END Main;

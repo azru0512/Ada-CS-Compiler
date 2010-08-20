@@ -1,0 +1,94 @@
+-- $Q221C
+ 
+--   Package implementation of the "integer stack" data type.
+--   split packages version
+ 
+package int_stk is
+ 
+    size : constant integer := 100;
+ 
+    type stack is record
+         top   : integer range 0 .. size; -- a ":= 0" here can save proc create
+         elem  : array (1 .. size) of integer;  -- allowed in Ada/CS
+    end record;
+ 
+    procedure create (S : out stack);
+ 
+    procedure push (S : in out stack; i : in integer);
+ 
+    procedure pop  (S : in out stack);
+ 
+    function  top  (S : in stack) return integer;
+ 
+    function empty (S : in stack) return boolean;
+ 
+end int_stk;
+ 
+package foo is
+    procedure p;
+end foo;
+ 
+package body foo is
+ 
+    procedure P is
+    begin 
+      write("Test $Q221C:"; NEXT);
+    end p;
+ 
+begin
+    null;
+end foo;
+ 
+package body int_stk is
+ 
+    procedure create (S : out stack) is
+    begin
+      S.top := 0;
+    end create;
+ 
+    procedure push (S : in out stack; i : in integer) is
+    begin
+      S.top := S.top + 1;
+      S.elem(S.top) := i;
+    end push;
+ 
+    procedure pop (S : in out stack) is
+    begin
+      S.top := S.top - 1;
+    end pop;
+ 
+    function top (S : in stack) return integer is
+    begin
+      return S.elem(S.top);
+    end top;
+ 
+    function empty (S : in stack) return boolean is
+    begin
+      return S.top = 0;
+    end empty;
+ 
+end int_stk;
+ 
+package main is
+body begin
+  foo.p;   -- print test name
+ 
+  declare
+    S : int_stk.stack;
+    i, j, k : integer;
+  begin
+    int_stk.create(S);
+    if not int_stk.empty(S) then
+       write(NEXT; "==> Error in int_stk.create");
+    end if;
+    int_stk.push(S, 1; S, 33; S, -75);
+    k := int_stk.top(S); int_stk.pop(S);
+    j := int_stk.top(S); int_stk.pop(S);
+    i := int_stk.top(S); int_stk.pop(S);
+    if i /= 1 or j /= 33 or k /= -75 or not int_stk.empty then
+       write(NEXT; "==> Error in int_stk.top/pop");
+    end if;
+  end;
+ 
+  write(NEXT);
+end main;

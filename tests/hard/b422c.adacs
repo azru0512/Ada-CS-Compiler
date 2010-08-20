@@ -1,0 +1,21 @@
+-- $B422C
+ 
+-- Simple array subscript checking (run-time)
+ 
+PACKAGE Main IS
+ 
+BODY
+ 
+    A : array (1..10) of integer;
+    I : integer;
+ 
+BEGIN
+    WRITE("Test $B422C(*):"; NEXT);
+ 
+    I := 8;
+    A(I) := 0;
+    A(I+3) := A(I);
+ 
+    WRITE("==> Failed to raise array subscript constraint error");
+    WRITE(NEXT);
+END Main;

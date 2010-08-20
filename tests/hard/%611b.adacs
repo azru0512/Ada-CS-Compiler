@@ -1,0 +1,41 @@
+-- $$611B -- adapted from the following ACVC test(s):
+--   B53004A-AB.ADA
+ 
+-- CHECK THAT CONDITIONS MUST BE BOOLEAN EXPRESSIONS.
+ 
+ 
+PACKAGE Main IS
+ 
+     I1, I2, I3 : INTEGER;
+     C1, C2 : REAL;
+     B1, B2 : BOOLEAN;
+ 
+BODY BEGIN
+     I1 := 0;    I2 := 1;
+     B1 := TRUE; B2 := FALSE;
+ 
+     IF 0 THEN      -- ERROR: ZERO AS A CONDITION.
+          I3 := 9;
+     END IF;
+ 
+     IF I1 THEN     -- ERROR: INTEGER AS A CONDITION.
+          I3 := 9;
+     END IF;
+ 
+     IF I1 + I2 THEN -- ERROR: INTEGER EXPRESSION AS A CONDITION.
+          I3 := 9;
+     END IF;
+ 
+     IF C1 THEN     -- ERROR: REAL AS A CONDITION.
+          I3 := 9;
+     END IF;
+ 
+     IF B1 OR I1 THEN     -- ERROR: INTEGER IN BOOLEAN EXPRESSION.
+          I3 := 9;
+     END IF;
+ 
+     IF B2 OR C1 THEN     -- ERROR: REAL IN BOOLEAN EXPRESSION.
+          I3 := 9;
+     END IF;
+ 
+END Main;
