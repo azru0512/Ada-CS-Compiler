@@ -1,9 +1,0 @@
--- Ada/CS scanner test program 3
-pragma ListOn;
-pragma ScanTraceOn;
--- Let's try some interesting strings
- 
-str := "This is a runaway string ..............
-..." Is this useful ? "
-"How many ""s you will get """"""""""";
-strange := "How about this one ?  " & "more fun ""

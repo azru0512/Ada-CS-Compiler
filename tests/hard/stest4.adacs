@@ -1,8 +1,0 @@
--- Ada/CS scanner test program 4
-pragma ListOn;
-pragma ScanTraceOn;
--- Let's elaborate more on the ".." issue
- 
-10..100;
-.....3.4...4..5;
-100. .200".."300;

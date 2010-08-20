@@ -1,9 +1,0 @@
--- Ada/CS scanner test program 5
-pragma ListOn;
-pragma ScanTraceOn;
--- Do you catch illegal characters ?
- 
-{ Pascal comments ? }
-Student# := major% * total_enrollment !
-"A string should allow ""~`|@#$%^&*()º!}{;:=+›?/,<>"" !!"
-"But is tab char '	' allowed ?";
