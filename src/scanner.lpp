@@ -1,0 +1,119 @@
+%{
+extern "C"
+{
+  int yyparse(void);
+  int yylex(void);
+  int yyerror(const char*) { return 1; };
+  int yywrap(void) { return 1; };
+}
+
+#include "parser.h"
+#include "SymbolTable.hpp"
+#include "Attribute/Keyword.hpp"
+#include <iostream>
+#include <string>
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+
+#define TOKEN(t) (yylval.token = t)
+%}
+
+DIGIT     [0-9]
+LETTER    [a-zA-Z]
+INTEGER   ({DIGIT}(_|{DIGIT})*)
+EXPONENT  ([eE](\+?|-){INTEGER})
+FLOAT     {INTEGER}(\.{INTEGER}){EXPONENT}?
+STRING    \"(\"\"|[^\"])*\"
+
+%%
+
+":" { return TOKEN(COLON); }
+"," { return TOKEN(COMMA); }
+":=" { return TOKEN(ASSIGN); }
+"<>" { return TOKEN(OPEN_CLOSE); }
+"=>" { return TOKEN(ARROW); }
+"(" { return TOKEN(L_PAREN); }
+")" { return TOKEN(R_PAREN); }
+".." { return TOKEN(DOT_DOT); }
+";" { return TOKEN(SEMI); }
+"|" { return TOKEN(VERTICAL_BAR); }
+"**" { return TOKEN(STAR_STAR); }
+"=" { return TOKEN(EQUAL); }
+"/=" { return TOKEN(NOT_EQUAL); }
+"<<" { return TOKEN(LESS); }
+"<=" { return TOKEN(LESS_EQUAL); }
+">>" { return TOKEN(GREATER); }
+">=" { return TOKEN(GREATER_EQUAL); }
+"+" { return TOKEN(PLUS); }
+"-" { return TOKEN(MINUS); }
+"&" { return TOKEN(AMPERSAND); }
+"*" { return TOKEN(STAR); }
+"/" { return TOKEN(SLASH); }
+"." { return TOKEN(DOT); }
+"'" { return TOKEN(TICK); }
+
+{LETTER}({LETTER}|{DIGIT}|_)* {
+  if (IsKeyword(yytext))
+  {
+    if (IdEntry *id_entry = Lookup(yytext, false))
+    {
+      if (Keyword *kw = dynamic_cast<Keyword *>(id_entry->second))
+        return yylval.token = kw->kwv(); 
+      else
+        std::cerr << "bad cast" << std::endl;
+    }
+  }
+  else
+  {
+    yylval.str = yytext;
+    return IDENTIFIER; 
+  }
+}
+
+"'"."'" {}
+
+{INTEGER} {
+  std::string str(yytext);
+  boost::algorithm::erase_all(str, "_");
+
+  try
+  {
+    yylval.ival = boost::lexical_cast<long>(str);
+    return INTLITERAL;
+  }
+  catch (boost::bad_lexical_cast &bc)
+  {
+    std::cerr << "bad lexical cast caught: " << bc.what() << std::endl;
+  }
+}
+
+{FLOAT} {
+  std::string str(yytext);
+  boost::algorithm::erase_all(str, "_");
+
+  try
+  {
+    yylval.fval = boost::lexical_cast<double>(str);
+    return FLOATLITERAL;
+  }
+  catch (boost::bad_lexical_cast &bc)
+  {
+    std::cerr << "bad lexical cast caught: " << bc.what() << std::endl;
+  }
+}
+
+{STRING} {
+  std::string str(yytext);
+  yylval.str = const_cast<char *>(str.c_str());
+  return STRLITERAL;
+}
+
+--.*$ ; /* ignore comment */
+
+[ \t] ; /* ignore space */
+
+\n {}
+
+. {} 
+
+%%

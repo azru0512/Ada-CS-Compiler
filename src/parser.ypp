@@ -1,0 +1,521 @@
+%{
+extern "C" {
+  int yyparse(void);
+  int yylex(void);
+  int yyerror(const char*);
+}
+
+#include "SymbolTable.hpp"
+#include "SemanticAction.hpp"
+#include "AST/list.hpp"
+#include "AST/Node.hpp"
+#include "AST/StatList.hpp"
+#include "AST/Package.hpp"
+#include "AST/RetStat.hpp"
+#include "AST/IntegerExpr.hpp"
+#include "AST/BinaryExpr.hpp"
+#include "AST/UnaryExpr.hpp"
+#include "AST/Expression.hpp"
+#include "AST/VarNameExpr.hpp"
+#include <iostream>
+#include <memory>
+
+using std::cout;
+using std::cerr;
+
+Enviroment env;
+IdList id_list;
+Node *root;
+%}
+
+%union {
+  unsigned int token;
+  long ival;
+  double fval;
+  char *str;
+  class Node *node;
+}
+
+%token <token> RW_ABS RW_ACCESS RW_ALL RW_AND RW_ARRAY RW_BEGIN RW_BODY RW_CASE
+%token <token> RW_CONSTANT RW_DECLARE RW_ELSE RW_ELSIF RW_END RW_EXCEPTION
+%token <token> RW_EXIT RW_FOR RW_FUNCTION RW_IF RW_IN RW_IS RW_LOOP RW_MOD
+%token <token> RW_NOT RW_NULL RW_OF RW_OR RW_OTHERS RW_OUT RW_PACKAGE RW_PRAGMA
+%token <token> RW_PRIVATE RW_PROCEDURE RW_RAISE RW_RANGE RW_RECORD RW_RETURN
+%token <token> RW_REVERSE RW_SEPARATE RW_SUBTYPE RW_THEN RW_TYPE RW_USE RW_WHEN
+%token <token> RW_WHILE
+
+%token <str> IDENTIFIER STRLITERAL
+%token <ival> INTLITERAL
+%token <fval> FLOATLITERAL
+
+%token <token> COLON COMMA ASSIGN OPEN_CLOSE ARROW L_PAREN
+%token <token> R_PAREN DOT_DOT SEMI VERTICAL_BAR STAR_STAR EQUAL
+%token <token> NOT_EQUAL LESS LESS_EQUAL GREATER GREATER_EQUAL PLUS
+%token <token> MINUS AMPERSAND STAR SLASH DOT TICK
+
+%left LOGOP RW_AND RW_OR
+%nonassoc RELOP EQUAL NOT_EQUAL LESS LESS_EQUAL LESS_GREATER GREATER GREATER_EQUAL
+%left ADDOP PLUS MINUS AMPERSAND
+%nonassoc UNARYOP
+%left MULTOP STAR SLASH RW_MOD
+%nonassoc STAR_STAR
+
+%type <node> PackageSpecOrBody PackageDeclaration Compilation NonMtPcList CompilationUnit
+%type <node> Id NullStatement AssignmentStatement IfStatement Declaration ObjectDeclaration
+%type <node> Statement BodyDeclaration ReturnStatement StmtList SpecDeclList BodyDeclList
+%type <node> OptBeginStmtList OptInitialization Expression Primary Literal Name TypeOrSubtype
+%type <node> TypeName LogicalOp RelationalOp AddingOp UnaryAddingOp MultiplyingOp
+
+%%
+
+Compilation : { start(); } NonMtPcList { root = $2; finish(); }
+  ;
+
+NonMtPcList : PragmaList CompilationUnit { $$ = $2; }
+  | NonMtPcList PragmaList CompilationUnit
+  ;
+
+PragmaList :
+  | PragmaList Pragma
+  ;
+
+Pragma : RW_PRAGMA Id SEMI
+  | RW_PRAGMA error SEMI
+  ;
+
+CompilationUnit : PackageDeclaration
+  ;
+
+PackageDeclaration : RW_PACKAGE PackageSpecOrBody SEMI { $$ = $2; }
+  | RW_PACKAGE error SEMI
+  ;
+
+PackageSpecOrBody : Id RW_IS SpecDeclList OptPrivatePart OptBody RW_END OptId SEMI
+  | RW_BODY Id RW_IS BodyDeclList OptBeginStmtList OptExceptionPart RW_END OptId SEMI { $$ = new Package($4, $5); }
+  | RW_BODY Id RW_IS RW_SEPARATE
+  ;
+
+SpecDeclList :
+  | SpecDeclList SpecDeclaration
+  ;
+
+OptPrivatePart : PrivatePart
+  |
+  ;
+
+BodyDeclList : { $$ = new StatList(); }
+  | BodyDeclList BodyDeclaration { dynamic_cast<StatList*>($$)->AddStatement($2); }
+  ;
+
+OptBeginStmtList :
+  | RW_BEGIN StmtList { $$ = $2; }
+  ;
+
+StmtList : { $$ = new StatList(); }
+  | StmtList Statement { dynamic_cast<StatList*>($$)->AddStatement($2); }
+  ;
+
+OptExceptionPart :
+  | ExceptionPart
+  ;
+
+OptBody :
+  | RW_BODY BodyDeclList OptBeginStmtList OptExceptionPart
+  ;
+
+SpecDeclaration : PrivateTypeDeclaration
+  | Declaration
+  ;
+
+PrivateTypeDeclaration : RW_TYPE Id RW_IS RW_PRIVATE SEMI
+  | RW_TYPE error SEMI
+  ;
+
+PrivatePart : RW_PRIVATE NonMtPrivateItemList
+  ;
+
+NonMtPrivateItemList : PrivateItem
+  | NonMtPrivateItemList PrivateItem
+  ;
+
+PrivateItem : RW_SUBTYPE Id RW_IS SubtypeDefinition SEMI
+  | RW_SUBTYPE error SEMI
+  | RW_TYPE Id RW_IS TypeDefinition SEMI
+  | RW_TYPE error SEMI
+  ;
+
+BodyDeclaration : SubprogramBodyDecl
+  | Declaration
+  ;
+
+Declaration : ObjectDeclaration
+  | TypeDeclaration
+  | SubtypeDeclaration
+  | Pragma
+  | SubprogramDeclaration
+  | RW_USE NonMtNameList SEMI
+  | RW_USE error SEMI
+  | NonMtIdList COLON RW_EXCEPTION SEMI
+  | error COLON RW_EXCEPTION SEMI
+  ;
+
+ObjectDeclaration : NonMtIdList COLON OptConstant TypeOrSubtype OptInitialization SEMI { $$ = var_decl($4); }
+  ;
+
+NonMtIdList : Id { start_id_list($1); }
+  | NonMtIdList COMMA Id { next_id($3); }
+  ;
+
+Id : IDENTIFIER { $$ = process_id($1); }
+  ;
+
+OptConstant :
+  | RW_CONSTANT
+  ;
+
+TypeOrSubtype : ConstrainedArrayDef
+  | SubtypeDefinition
+  ;
+
+OptInitialization :
+  | ASSIGN Expression { $$ = $2; }
+  ;
+
+TypeDeclaration : RW_TYPE Id RW_IS TypeDefinition SEMI
+  | RW_TYPE error RW_IS TypeDefinition SEMI
+  | RW_TYPE Id RW_IS error SEMI
+  ;
+
+TypeName : Id { $$ = type_reference($1); }
+  | Id DOT TypeName
+  ;
+
+TypeDefinition : RecordTypeDefinition
+  | ArrayTypeDefinition
+  | EnumerationTypeDef
+  ;
+
+RecordTypeDefinition : RW_RECORD {} NonMtComponentList RW_END RW_RECORD {}
+  ;
+
+NonMtComponentList : NonMtComponentDeclarationList
+  | VariantPart
+  | NonMtComponentDeclarationList VariantPart
+  | RW_NULL SEMI
+  ;
+
+NonMtComponentDeclarationList : ComponentDeclaration
+  | NonMtComponentDeclarationList ComponentDeclaration
+  ;
+
+ComponentDeclaration : NonMtIdList COLON TypeOrSubtype OptInitialization SEMI {}
+  ;
+
+VariantPart : RW_CASE Id COLON TypeName RW_IS NonMtVariantList RW_END RW_CASE SEMI
+  ;
+
+NonMtVariantList  : Variant
+  | NonMtVariantList Variant
+  ;
+
+Variant : RW_WHEN Vchoice ARROW NonMtComponentList
+  ;
+
+Vchoice : Expression
+  ;
+
+ArrayTypeDefinition : UnconstrainedArrayDef
+  | ConstrainedArrayDef
+  ;
+
+UnconstrainedArrayDef : RW_ARRAY L_PAREN NonMtIndexSubtypeDefList R_PAREN RW_OF ElementType
+  ;
+
+NonMtIndexSubtypeDefList : IndexSubtypeDef
+  | NonMtIndexSubtypeDefList COMMA IndexSubtypeDef
+  ;
+
+IndexSubtypeDef : TypeName RW_RANGE OPEN_CLOSE
+  ;
+
+ConstrainedArrayDef : RW_ARRAY L_PAREN NonMtDiscreteRangeList R_PAREN RW_OF ElementType
+  ;
+
+NonMtDiscreteRangeList : DiscreteRange
+  | NonMtDiscreteRangeList COMMA DiscreteRange
+  ;
+
+ElementType : TypeOrSubtype
+  ;
+
+EnumerationTypeDef : L_PAREN NonMtIdList R_PAREN
+  ;
+
+SubtypeDeclaration : RW_SUBTYPE Id RW_IS SubtypeDefinition SEMI
+  ;
+
+SubtypeDefinition : TypeName
+  | RangeConstraint
+  | TypeName RangeConstraint
+  | TypeName IndexConstraint
+  ;
+
+RangeConstraint : RW_RANGE Range
+  ;
+
+Range : Expression DOT_DOT Expression
+  ;
+
+IndexConstraint : L_PAREN NonMtDiscreteRangeList R_PAREN
+  ;
+
+DiscreteRange : Id
+  ;
+
+DiscreteRange : Range
+  ;
+
+SubprogramDeclaration : SubprogramSpecification SEMI
+  ;
+
+SubprogramBodyDecl : SubprogramSpecification RW_IS BodyDeclList RW_BEGIN StmtList OptExceptionPart RW_END OptDesignator SEMI
+  ;
+
+SubprogramSpecification : RW_PROCEDURE Id OptFormalPart
+  | RW_FUNCTION Designator OptFormalPart RW_RETURN SubtypeDefinition
+  ;
+
+OptDesignator :
+  | Designator
+  ;
+
+Designator : Id
+  | OperatorSymbol
+  ;
+
+OperatorSymbol : STRLITERAL
+  ;
+
+FormalPart : L_PAREN NonMtParamDeclList R_PAREN
+  ;
+
+OptFormalPart :
+  | FormalPart
+  ;
+
+NonMtParamDeclList : ParameterDecl
+  | NonMtParamDeclList SEMI ParameterDecl
+  ;
+
+ParameterDecl : NonMtIdList COLON OptMode TypeName
+  ;
+
+OptMode :
+  | Mode
+  ;
+
+Mode : RW_IN RW_OUT
+  | RW_IN
+  | RW_OUT
+  ;
+
+ExceptionPart : RW_EXCEPTION ExceptionHandlerList
+  ;
+
+ExceptionHandlerList :
+  | ExceptionHandlerList ExceptionHandler
+  ;
+
+ExceptionHandler : RW_WHEN ExceptionWhenTail
+  ;
+
+ExceptionWhenTail : RW_OTHERS ARROW  StmtList
+  | NonMtVbNameList ARROW StmtList
+  ;
+
+NonMtVbNameList : Name
+  | NonMtVbNameList VERTICAL_BAR Name
+  ;
+
+Statement : Pragma
+  | NullStatement
+  | AssignmentStatement
+  | CallStatement
+  | Block
+  | LoopStatement
+  | IfStatement
+  | ExitStatement
+  | ReturnStatement
+  | CaseStatement
+  | RaiseStatement
+  ;
+
+NullStatement : RW_NULL SEMI
+  ;
+
+AssignmentStatement : Name ASSIGN Expression SEMI { $$ = assignment($1, $3); }
+  ;
+
+CallStatement : Name SEMI
+  ;
+
+Block : OptNameColon OptDeclPart RW_BEGIN StmtList OptExceptionPart RW_END OptId SEMI
+  ;
+
+OptNameColon :
+  | Id COLON
+  ;
+
+OptDeclPart :
+  | DeclPart
+  ;
+
+OptId :
+  | Id
+  ;
+
+DeclPart : RW_DECLARE BodyDeclList
+  ;
+
+ReturnStatement : RW_RETURN Expression SEMI { $$ = new RetStat($2); }
+  | RW_RETURN SEMI { $$ = new RetStat(); }
+  ;
+
+RaiseStatement : RW_RAISE OptName SEMI
+  ;
+
+OptName :
+  | Name
+  ;
+
+IfStatement : RW_IF BExpr RW_THEN StmtList ElsifList OptElsePart RW_END RW_IF SEMI
+  ;
+
+ElsifList :
+  | ElsifList RW_ELSIF BExpr RW_THEN StmtList
+  ;
+
+OptElsePart :
+  | ElsePart
+  ;
+
+ElsePart : RW_ELSE StmtList
+  ;
+
+LoopStatement : OptNameColon OptIterationClause BasicLoop OptId SEMI
+  ;
+
+OptIterationClause :
+  | IterationClause
+  ;
+
+BasicLoop : RW_LOOP StmtList RW_END RW_LOOP
+  ;
+
+IterationClause : RW_WHILE BExpr
+  | RW_FOR Id RW_IN OptReverse DiscreteRange
+  ;
+
+OptReverse :
+  | RW_REVERSE
+  ;
+
+ExitStatement : RW_EXIT Name RW_WHEN BExpr SEMI
+  | RW_EXIT SEMI
+  | RW_EXIT RW_WHEN BExpr SEMI
+  | RW_EXIT Name SEMI
+  ;
+
+CaseStatement : RW_CASE Expression RW_IS WhenList OptOthers RW_END RW_CASE SEMI
+  ;
+
+WhenList :
+  | WhenList When
+  ;
+
+When: RW_WHEN NonMtChoiceList ARROW StmtList
+  ;
+
+OptOthers :
+  | RW_WHEN RW_OTHERS ARROW StmtList
+  ;
+
+NonMtChoiceList : Choice
+  | NonMtChoiceList VERTICAL_BAR Choice
+  ;
+
+Choice : Expression
+  | Expression DOT_DOT Expression
+  ;
+
+BExpr : Expression
+  ;
+
+Expression : Expression LogicalOp Expression %prec LOGOP
+  | Expression RW_AND RW_THEN Expression %prec LOGOP
+  | Expression RW_OR RW_ELSE Expression %prec LOGOP
+  | Expression RelationalOp Expression %prec RELOP
+  | Expression AddingOp Expression { $$ = eval_binary($1, $2, $3); } %prec ADDOP
+  | UnaryAddingOp Expression { $$ = eval_unary($1, $2); } %prec UNARYOP
+  | Expression MultiplyingOp Expression { $$ = eval_binary($1, $2, $3); } %prec MULTOP
+  | Expression STAR_STAR Expression
+  | RW_NOT Primary
+  | RW_ABS Primary
+  | Primary
+  ;
+
+Primary : Literal
+  | Name {}
+  | L_PAREN Expression R_PAREN { $$ = $2; }
+  ;
+
+Literal : INTLITERAL { $$ = process_literal($1); }
+  | FLOATLITERAL { $$ = process_literal($1); }
+  | STRLITERAL { $$ = process_literal($1); }
+  ;
+
+LogicalOp : RW_AND { $$ = process_op($1); }
+  | RW_OR { $$ = process_op($1); }
+  ;
+
+RelationalOp : EQUAL { $$ = process_op($1); }
+  | NOT_EQUAL { $$ = process_op($1); }
+  | LESS { $$ = process_op($1); }
+  | LESS_EQUAL { $$ = process_op($1); }
+  | GREATER { $$ = process_op($1); }
+  | GREATER_EQUAL { $$ = process_op($1); }
+  ;
+
+AddingOp : PLUS { $$ = process_op($1); }
+  | MINUS { $$ = process_op($1); }
+  | AMPERSAND { $$ = process_op($1); }
+  ;
+
+UnaryAddingOp : PLUS { $$ = process_op($1); }
+  | MINUS { $$ = process_op($1); }
+  ;
+
+MultiplyingOp : STAR { $$ = process_op($1); }
+  | SLASH { $$ = process_op($1); }
+  | RW_MOD { $$ = process_op($1); }
+  ;
+
+Name : Id NonMtNameSuffixList { $$ = new_name($1); }
+  ;
+
+NonMtNameSuffixList :
+  | DOT Id NonMtNameSuffixList
+  | DOT OperatorSymbol NonMtNameSuffixList
+  | L_PAREN NonMtExpList R_PAREN NonMtNameSuffixList
+  | TICK Id NonMtNameSuffixList
+  ;
+
+NonMtExpList : Expression
+  | NonMtExpList COMMA Expression
+  ;
+
+NonMtNameList : Name
+  | NonMtNameList COMMA Name
+  ;
+
+%%

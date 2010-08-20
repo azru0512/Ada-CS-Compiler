@@ -1,0 +1,31 @@
+Compiler Construction Project
+
+Please follow the following steps to generate the executable.
+
+1. run autogen.sh to regenerate configuration files
+2. mkdir build; cd build
+3. ../configure
+4. make
+
+Compile the test Ada/CS program.
+
+5. src/parser < ../test/test.adacs
+
+The output should be:
+
+; ModuleID = 'ada/cs'
+
+define double @main() {
+entry:
+  %k = alloca double                              ; <double*> [#uses=2]
+  %j = alloca i64                                 ; <i64*> [#uses=2]
+  %i = alloca i64                                 ; <i64*> [#uses=3]
+  store i64 0, i64* %i
+  store i64 0, i64* %j
+  store double 0.000000e+00, double* %k
+  store i64 8, i64* %i
+  %i1 = load i64* %i                              ; <i64> [#uses=1]
+  %modtmp = srem i64 %i1, 4                       ; <i64> [#uses=1]
+  store i64 %modtmp, i64* %j
+  store double 3.140000e+00, double* %k
+}
