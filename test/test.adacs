@@ -1,10 +1,10 @@
 package
   body abc is
-    i, j : integer;
+    i, j : float;
     k : boolean;
   begin
-    i := 2 * 2 + 4;
-    j := i / 4;
+    i := 2.0 * 2.0 + 42.1;
+    j := i * 4.0;
     return 100000;
   end;
 ;

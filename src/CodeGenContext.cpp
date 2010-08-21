@@ -77,7 +77,7 @@ llvm::AllocaInst *CodeGenContext::CreateEntryBlockAlloca(llvm::Function *func,
   else if (typeid(type) == typeid(FloatType))
     return tmp.CreateAlloca(llvm::Type::getDoubleTy(llvm::getGlobalContext()), 0, name.c_str());
   else if (typeid(type) == typeid(BooleanType))
-    return tmp.CreateAlloca(llvm::Type::getInt64Ty(llvm::getGlobalContext()), 0, name.c_str());
+    return tmp.CreateAlloca(llvm::Type::getInt1Ty(llvm::getGlobalContext()), 0, name.c_str());
   else
     return tmp.CreateAlloca(llvm::Type::getVoidTy(llvm::getGlobalContext()), 0, name.c_str());
 }

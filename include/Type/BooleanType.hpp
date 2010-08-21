@@ -5,6 +5,9 @@
 #include "Type/Type.hpp"
 
 class BooleanType : public Type
-{};
+{
+public :
+  void print() const {};
+};
 
 #endif
