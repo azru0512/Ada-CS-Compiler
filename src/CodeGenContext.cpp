@@ -8,9 +8,9 @@
 #include "llvm/GlobalValue.h"
 #include "llvm/LLVMContext.h"
 #include "llvm/Module.h"
-#include "llvm/PassManager.h"
 #include "llvm/Type.h"
 #include "llvm/Analysis/Verifier.h"
+#include "llvm/Bitcode/ReaderWriter.h"
 #include "llvm/ExecutionEngine/GenericValue.h"
 #include "llvm/ExecutionEngine/JIT.h"
 #include "llvm/Support/ManagedStatic.h"
@@ -27,8 +27,6 @@ using llvm::PassManager;
 using llvm::outs;
 using std::string;
 using std::cerr;
-
-//class BasicBlock;
 
 CodeGenContext::CodeGenContext(const std::string &name)
   : module_(new llvm::Module(name, llvm::getGlobalContext())),
@@ -86,27 +84,33 @@ llvm::AllocaInst *CodeGenContext::CreateEntryBlockAlloca(llvm::Function *func,
 
 void CodeGenContext::WriteBitCode() const
 {
-  llvm::WriteBitcodeToFile(module_, llvm::outs());
+  if (Verify())
+    llvm::WriteBitcodeToFile(module_, llvm::outs());
 }
 
 void CodeGenContext::Run() const
 {
   if (Verify())
   {
+    // 為 JIT 建立執行環境。見 llvm/Target/TargetSelect.h。
     llvm::InitializeNativeTarget();
+
+    // 針對 Module 建立執行引擎。
     llvm::ExecutionEngine *ee = llvm::EngineBuilder(module_).create();
+
+    // 準備參數陣列以被欲呼叫的函式使用。
     std::vector<llvm::GenericValue> noargs;
+
+    // 呼叫 main_func_ 並傳入參數。
     llvm::GenericValue gv = ee->runFunction(main_func_, noargs);
     llvm::outs() << "Result: " << gv.IntVal << "\n";
+
+    // 銷毀 ManagedStatic 變數。見 llvm/Support/ManagedStatic.h。
     llvm::llvm_shutdown();
-  }
-  else
-  {
-    std::cerr << "Module is wrong!\n";
   }
 }
 
 bool CodeGenContext::Verify() const
 {
-  return !llvm::verifyModule(*(this->module_), llvm::PrintMessageAction); 
+  return !llvm::verifyModule(*module_, llvm::PrintMessageAction); 
 }

@@ -3,18 +3,14 @@
 
 
 #include "AST/Node.hpp"
+#include "llvm/Function.h"
 #include "llvm/LLVMContext.h"
 #include "llvm/Module.h"
-#include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/ExecutionEngine/GenericValue.h"
 #include "llvm/Support/IRBuilder.h"
-//#include "llvm/Support/raw_ostream.h"
-#include <iostream>
 #include <string>
 
 class Type;
 class AllocaInst;
-class Function;
 
 // 類別 CodeGenContext
 //
@@ -44,23 +40,23 @@ public :
   // 可用 llvm-dis 把 bicode 轉成 LLVM 組語。
   void WriteBitCode() const;
 
-  //  將 Module 內容以 LLVM 組語的型式寫到輸出裝置 stderr。
+  // 將 Module 內容以 LLVM 組語的型式寫到輸出裝置 stderr。
   void Dump() const { module_->dump(); }
 
+  // JIT 執行 LLVM Module。
   void Run() const;
   
-private :
+private : 
+  // 驗證 Module 是否正確。若有錯誤，則會將錯誤訊息寫到輸出裝置 stdout。
   bool Verify() const;
 
-  // LLVM IR 中最上層的結構為 LLVM::Module。
-  // Module 裡面包含所有的函式和全域變數。
+  // LLVM IR 中最上層的結構為 LLVM::Module。Module 裡面包含所有的函式和全域變數。
   llvm::Module *module_;
 
   // LLVM 提供的類別 IRBuilder 可用來產生 LLVM IR。
   llvm::IRBuilder<> builder_;
 
-  // Module 裡面最上層的函式。
-  // 函式包含 Basic Block。
+  // Module 裡面最上層的函式。函式包含 Basic Block。
   llvm::Function *main_func_;
 };
 
