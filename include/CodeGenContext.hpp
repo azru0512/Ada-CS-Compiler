@@ -8,7 +8,7 @@
 #include "llvm/Bitcode/ReaderWriter.h"
 #include "llvm/ExecutionEngine/GenericValue.h"
 #include "llvm/Support/IRBuilder.h"
-#include "llvm/Support/raw_ostream.h"
+//#include "llvm/Support/raw_ostream.h"
 #include <iostream>
 #include <string>
 
@@ -34,21 +34,24 @@ public :
   // 為每個變數配置一塊記憶體空間。
   // LLVM::Function 是寫入 LLVM IR 的最上層結構。
   // 後兩個參數分別代表變數的型態和名字。
-  static llvm::AllocaInst *CreateEntryBlockAlloca(llvm::Function *func, const Type &type, const std::string &name);
+  static llvm::AllocaInst *CreateEntryBlockAlloca(llvm::Function *func,
+    const Type &type, const std::string &name);
 
   // 呼叫各型別自己的虛擬函式
   void CodeGen(Node &root) { root.CodeGen(builder_); }
 
-  // 將 Module 內容以 LLVM bitcode 的型式寫到輸出裝置，預設為 stdout。
-  // 可用 llvm-dis 把 bicode 轉成 human readable 的型式 (同 Dump() 輸出)。
-  void WriteBitCode() const { llvm::WriteBitcodeToFile(module_, llvm::outs()); }
+  // 將 Module 內容以 LLVM bitcode 的型式寫到輸出裝置 stdout。
+  // 可用 llvm-dis 把 bicode 轉成 LLVM 組語。
+  void WriteBitCode() const;
 
-  // 除錯之用。輸出 Module 內容到 stderr。
+  //  將 Module 內容以 LLVM 組語的型式寫到輸出裝置 stderr。
   void Dump() const { module_->dump(); }
 
-  llvm::GenericValue Run();
+  void Run() const;
   
 private :
+  bool Verify() const;
+
   // LLVM IR 中最上層的結構為 LLVM::Module。
   // Module 裡面包含所有的函式和全域變數。
   llvm::Module *module_;

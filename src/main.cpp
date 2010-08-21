@@ -22,6 +22,8 @@ extern Node *root;
 
 int main(int argc, char** argv)
 {
+  bool dump;
+  bool jit;
   string ifname;
   string ofname;
   ofstream ofile;
@@ -31,7 +33,8 @@ int main(int argc, char** argv)
   desc.add_options()
     ("help,h", "顯示幫助訊息")
     ("input-file,i", po::value<string>(&ifname), "指定輸入檔案")
-    ("output-file,o", po::value<string>(&ofname), "指定輸出檔案")
+    ("dump,d", po::value<bool>(&dump)->default_value(false), "輸出 LLVM 組語")
+    ("jit,j", po::value<bool>(&jit)->default_value(false), "JIT LLVM Module")
   ;
 
   po::variables_map vm;
@@ -51,11 +54,6 @@ int main(int argc, char** argv)
     yyin = fopen(ifname.c_str(), "r"); 
   }
 
-  if (vm.count("output-file"))
-  {
-    //ofile.open(ofname.c_str());
-  }
-
   // 呼叫 Bison 產生的 yyparse 函式。
   yyparse();
 
@@ -64,5 +62,10 @@ int main(int argc, char** argv)
   // 呼叫個別節點的 CodeGen 函式。
   context.CodeGen(*root);
   
-  context.WriteBitCode();
+  if (dump)
+    context.Dump();
+  else if (jit)
+    context.Run();
+  else
+    context.WriteBitCode();
 }
