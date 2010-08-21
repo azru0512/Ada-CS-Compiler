@@ -15,4 +15,4 @@ AM_CXXFLAGS = -O3 -std=c++0x -Wl,--rpath,/usr/local/lib/gcc44
 
 AM_CPPFLAGS = -I ${includedir}:$(top_srcdir)/include `llvm-config --cxxflags`
 
-AM_LDFLAGS = `llvm-config --ldflags --libs core jit native` -lboost_program_options
+AM_LDFLAGS = `llvm-config --ldflags --libs all` -lboost_program_options

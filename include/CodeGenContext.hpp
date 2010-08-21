@@ -5,8 +5,10 @@
 #include "AST/Node.hpp"
 #include "llvm/LLVMContext.h"
 #include "llvm/Module.h"
+#include "llvm/Bitcode/ReaderWriter.h"
 #include "llvm/ExecutionEngine/GenericValue.h"
 #include "llvm/Support/IRBuilder.h"
+#include <iostream>
 #include <string>
 
 class Type;
@@ -36,7 +38,11 @@ public :
   // 呼叫各型別自己的虛擬函式
   void CodeGen(Node &root) { root.CodeGen(builder_); }
 
-  void Print() const { module_->dump(); }
+  // 將 Module 內容以 LLVM bitcode 的型式寫到 stdout。可用 llvm-dis 把 bicode 轉成 human readable 的型式 (同 Dump() 輸出)。
+  void Print() const { llvm::WriteBitcodeToFile(module_, std::cout); }
+
+  // 除錯之用。輸出 Module 內容到 stderr。
+  void Dump() const { module_->dump(); }
 
   llvm::GenericValue Run();
   

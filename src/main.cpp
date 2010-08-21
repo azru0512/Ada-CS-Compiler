@@ -53,5 +53,6 @@ int main(int argc, char** argv)
 
   // 呼叫個別節點的 CodeGen 函式。
   context.CodeGen(*root);
+  
   context.Print();
 }
