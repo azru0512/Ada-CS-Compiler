@@ -2,6 +2,7 @@
 
 llvm::Value *IfStat::CodeGen(llvm::IRBuilder<> &builder)
 {
+/*
   // 產生 condition expression 的指令。
   llvm::Value *condv = cond_->CodeGen(builder);
 
@@ -74,5 +75,6 @@ llvm::Value *IfStat::CodeGen(llvm::IRBuilder<> &builder)
   phi->addIncoming(thenv, then_bb);
   phi->addIncoming(elsev, else_bb);
 
-  return phi; 
+  return phi;
+*/
 }

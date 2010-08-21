@@ -11,7 +11,7 @@
 #include "llvm/GlobalValue.h"
 #include "llvm/Instructions.h"
 #include "llvm/PassManager.h"
-#include "llvm/ModuleProvider.h"
+//#include "llvm/ModuleProvider.h"
 #include "llvm/ExecutionEngine/GenericValue.h"
 #include "llvm/ExecutionEngine/JIT.h"
 #include "llvm/Assembly/PrintModulePass.h"
