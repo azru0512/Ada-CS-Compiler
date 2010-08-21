@@ -8,6 +8,8 @@
  *
  * 參考文件:
  *
+ * <a href="http://www.gnu.org/software/hello/manual/automake/">GNU Automake</a>
+ *
  * <a href="http://sourceware.org/autobook/">GNU AUTOCONF AUTOMAKE, AND LIBTOOL</a>
  *
  */

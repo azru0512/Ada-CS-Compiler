@@ -12,7 +12,7 @@
  *
  *  注意! 關於編譯器理論或是本計劃會使用到的工具，本文件不打算給予詳盡介紹。文中僅會引用簡易參考文件，再加上些許說明。詳細文件列在參考文件。
  *
- *  程式碼可以在<a href="http://www.cs.nctu.edu.tw/~chenwj/ada-cs.tar.gz">這裡</a>下載。
+ *  可以使用 git clone git://github.com/azru0512/Ada-CS-Compiler.git 下載程式碼。
  *
  *  若有任何問題請寄信至 chenwj at cs.nctu.edu.tw
  */

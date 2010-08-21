@@ -29,3 +29,21 @@ entry:
   store i64 %modtmp, i64* %j
   store double 3.140000e+00, double* %k
 }
+
+-------------------------------------------------------------------------------
+
+Directory Structure
+
+ AUTHORS
+ ChangeLog
+ Doxyfile
+ Makefile.am
+ NEWS
+ README
+ autogen.sh
+ configure.ac
+ /doc
+ /include
+ m4
+ /src
+ /test

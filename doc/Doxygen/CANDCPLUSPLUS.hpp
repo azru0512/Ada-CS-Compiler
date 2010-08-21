@@ -21,4 +21,8 @@
  *
  * <a href="http://jvm.cs.nctu.edu.tw/~chenwj/Accelerated%20C++/">Accelerated C++</a>
  *
+ * <a href="http://jvm.cs.nctu.edu.tw/~chenwj/TICPP-2nd-ed-Vol-one/TICPP-2nd-ed-Vol-one-html/Frontmatter.html">Thinking in C++, 2nd ed. Volume 1</a>
+ *
+ * <a href="http://jvm.cs.nctu.edu.tw/~chenwj/TICPP-2nd-ed-Vol-two/html/TicV2.html">Thinking In C++, 2nd ed. Volume 2</a>
+ *
  */

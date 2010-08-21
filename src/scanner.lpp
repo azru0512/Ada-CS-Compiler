@@ -58,7 +58,9 @@ STRING    \"(\"\"|[^\"])*\"
     if (IdEntry *id_entry = Lookup(yytext, false))
     {
       if (Keyword *kw = dynamic_cast<Keyword *>(id_entry->second))
-        return yylval.token = kw->kwv(); 
+      {
+        return yylval.token = kw->kwv();
+      }
       else
         std::cerr << "bad cast" << std::endl;
     }
