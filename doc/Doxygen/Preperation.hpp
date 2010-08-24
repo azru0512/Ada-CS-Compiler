@@ -1,5 +1,9 @@
 /** \page pre 工具
  *
+ *  <a href="">git</a></br>
+ *  - <a href="http://progit.org/book/">Pro Git</a>
+ *  - <a href="http://www.bitsun.com/documents/gittutorcn.htm">Git 中文教程</a>
+ *
  *  <a href="http://www.lrde.epita.fr/~adl/autotools.html">Autotools</a></br> - 我們利用 Autotools 來管理此計劃。
  *  - \subpage autotools
  *
