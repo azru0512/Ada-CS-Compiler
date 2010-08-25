@@ -3,15 +3,16 @@
 
 
 #include "AST/Statement.hpp"
-#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
+// 無用
 class BlockStat : public Statement
 {
 public :
-  void AddStatement(Statement *stat) { stat_list_.push_back(*stat); }
+  void AddStatement(Statement *stat) { stat_list_.push_back(stat); }
 
 priavte:
-  std::vector<Statement *> stat_list_;
+  boot::ptr_vector<Statement> stat_list_;
 };
 
 #endif
