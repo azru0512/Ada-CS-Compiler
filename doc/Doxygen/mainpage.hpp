@@ -5,6 +5,7 @@
  *  本文件將分成下列幾個章節:
  *  - \subpage pre
  *  - \subpage intro
+ *  - \subpage symtbl
  *  - \subpage lexical
  *  - \subpage syntax
  *  - \subpage semantic

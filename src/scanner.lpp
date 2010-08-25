@@ -55,7 +55,7 @@ STRING    \"(\"\"|[^\"])*\"
 {LETTER}({LETTER}|{DIGIT}|_)* {
   if (IsKeyword(yytext))
   {
-    if (IdEntry *id_entry = Lookup(yytext, false))
+    if (SymTblEntry *id_entry = Lookup(yytext, false))
     {
       if (Keyword *kw = dynamic_cast<Keyword *>(id_entry->second))
       {

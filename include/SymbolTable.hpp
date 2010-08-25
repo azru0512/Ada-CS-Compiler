@@ -5,6 +5,7 @@
 #define _SYMBOLTABLE_HPP_
 
 
+#include "Attribute/Attribute.hpp"
 #include <iostream>
 #include <string>
 #include <stack>
@@ -35,9 +36,12 @@ const string KW[NUM_KEYWORDS] = {
 
 class Attribute;
 
-// 符號表中所存的項目。項目由識別字的名字和其屬性構成。
-typedef pair<const string, Attribute *> IdEntry;
+// 供 ObjDelStat 使用的資料結構。
+typedef pair<const string, Attribute> IdEntry;
 typedef map<std::string, Attribute *> IdEntryList; 
+
+// 號表中所存的項目。項目由識別字的名字和其屬性構成。
+typedef pair<const string, Attribute *> SymTblEntry;
 
 // 符號表，其中存放識別字的名字和其屬性。
 typedef map<const string, Attribute *> SymbolTable;
@@ -47,13 +51,13 @@ typedef map<const string, Attribute *> SymbolTable;
 typedef list<SymbolTable> Enviroment;
 
 // 由內向外搜尋符號表，預設區分名字大小寫。
-IdEntry *Lookup(const string &name, bool sensitive = true);
+SymTblEntry *Lookup(const string &name, bool sensitive = true);
 
 // 將識別字填入目前 scope 的符號表。
-IdEntry *Enter(const string &name);
+SymTblEntry *Enter(const string &name);
 
 // 設定該識別字的屬性。
-void SetAttribute(IdEntry *id_entry);
+void SetAttribute(SymTblEntry *id_entry);
 
 // 判斷該識別字是否為關鍵字。
 bool IsKeyword(const string &name);

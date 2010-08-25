@@ -16,7 +16,7 @@ using boost::algorithm::to_upper_copy;
 
 extern Enviroment env;
 
-IdEntry *Lookup(const string &name, bool sensitive)
+SymTblEntry *Lookup(const string &name, bool sensitive)
 {
   SymbolTable::iterator id_entry;
   string id = sensitive? name : to_upper_copy(name);
@@ -30,7 +30,7 @@ IdEntry *Lookup(const string &name, bool sensitive)
   return 0;
 }
 
-IdEntry *Enter(const string &name)
+SymTblEntry *Enter(const string &name)
 {
   auto curr_sym_tbl = env.begin();
 
@@ -60,7 +60,7 @@ bool IsKeyword(const string &name)
 
 std::ostream& operator<<(std::ostream& os, const SymbolTable &sym_tbl)
 {
-  foreach(IdEntry id_entry, sym_tbl)
+  foreach(SymTblEntry id_entry, sym_tbl)
   {
     os << id_entry.first << " => ";
     if (id_entry.second)
