@@ -6,11 +6,11 @@
  *
  * LLVM 模塊 (module) 是 LLVM 所能見到的最上層結構。它可以是一個或多個翻譯單元組成，多個翻譯單元透過連結器形成一個 LLVM 模塊。LLVM 模塊內含函數 (function)，函數內含基本塊 (basic block)。LLVM IRBuilder 即是針對一個基本塊產出 LLVM 組語。
  *
- * LLVM 類別 Type 定義了 LLVM 自定型別。另外，LLVM 指令中的運算元皆為 LLVM 類別 Value 或其衍生類別。類別 Value 和其衍生類別均有 Type。
+ * llvm::Type 類別定義了 LLVM 的自定型別。另外，LLVM 指令中的運算元皆為 llvm::Value 類別或其衍生類別。llvm::Value 類別和其衍生類別均帶有 llvm::Type。
  *
- * LLVM 自 2.5 版之後支援多緒執行。LLVM 類別 LLVMContext 是用來確保多個 LLVM 實體之間不會互相干擾。
+ * LLVM 自 2.5 版之後支援多緒執行。llvm::LLVMContext 類別是用來確保多個 LLVM 實體之間不會互相干擾。
  *
- * LLVM 提供直譯器和即時編譯 (Just In Time, JIT)。即時編譯須目標平台支援。
+ * LLVM 提供直譯器和即時編譯 (Just In Time, JIT)。即時編譯須目標平台支援。在啟動 JIT 之前，必須呼叫 llvm::LLVMInitializeAllTargets() 靜態函數以連結所有 LLVM 支援的平台。
  *
  * 參考文件:
  * - <a href="http://jvm.cs.nctu.edu.tw/~chenwj/slide/20081205_HowToUseJIT&MakeJITSupport_chenwj.pdf">How To Use JIT & Make JIT Support</a>

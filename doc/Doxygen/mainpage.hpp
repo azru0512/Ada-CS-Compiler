@@ -15,7 +15,9 @@
  *
  *  可以使用 git clone git://github.com/azru0512/Ada-CS-Compiler.git 下載程式碼。
  *
- *  若有任何問題請寄信至 chenwj at cs.nctu.edu.tw
+ *  若有任何問題請寄信至 <chenwj at cs.nctu.edu.tw>
+ *
+ *  If you have any question, feel free to send email to <chenwj at cs.nctu.edu.tw>. 
  */
 
 #ifndef _MAINPAGE_H_
