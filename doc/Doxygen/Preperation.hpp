@@ -19,4 +19,7 @@
  *  - \subpage llvm
  *
  *  <a href="http://www.stack.nl/~dimitri/doxygen/">Doxygen</a></br> - 使用 Doxygen 產生文檔。
+ *
+ *  中英文名詞對照
+ *  - \subpage en2ch
  */
