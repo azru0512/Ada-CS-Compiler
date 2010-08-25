@@ -11,9 +11,14 @@ LT_INIT
 
 # Checks for programs.
 AC_PROG_CXX([g++44])
+
+# 檢查系統是否裝有 lex 或與其相容的套件
 AM_PROG_LEX
+
+# 檢查系統是否裝有 yacc 或與其相容的套件
 AC_PROG_YACC
-#AX_BOOST_BASE([1.33.1])
+
+#AX_BOOST_BASE(1.33.1])
 
 # Checks for libraries.
 
