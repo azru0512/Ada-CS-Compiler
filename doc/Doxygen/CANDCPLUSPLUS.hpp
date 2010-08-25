@@ -2,7 +2,7 @@
  *
  * Flex/Bison 皆有將其原本 C 實作包裝成 C++ 類別。但我們目前僅採用 Flex/Bison 原本的 C 實作。其餘部份則採用 C++。編程風格採用 <a href="http://yangyubo.com/google-cpp-styleguide/">Google C++ 风格指南 - 中文版</a>。
  *
- * 有關樣板的錯誤訊息請用<a href="http://www.bdsoft.com/tools/stlfilt.html">STLFilt</a>。
+ * 有關樣板的錯誤訊息請用<a href="http://www.bdsoft.com/tools/stlfilt.html">STLFilt</a>幫助解讀。請見<a href="http://bdsoft.proboards.com/index.cgi?board=talk&action=display&thread=22">STLFilt and Linux</a>。
  *
  * C/C++:
  * - <a href="http://jvm.cs.nctu.edu.tw/~chenwj/ebook/C++%20Primer/ch02lev1sec3.html#idd1e10749">extern</a>
