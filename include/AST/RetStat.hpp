@@ -3,6 +3,7 @@
 
 
 #include "AST/Statement.hpp"
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 class RetStat : public Statement
 {
@@ -21,7 +22,7 @@ public :
   }
 
 private :
-  Node *expr_;
+  boost::shared_ptr<Node> expr_;
 };
 
 #endif

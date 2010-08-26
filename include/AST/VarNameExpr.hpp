@@ -4,6 +4,7 @@
 
 #include "AST/Expression.hpp"
 #include "Attribute/Variable.hpp"
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 /**
  * Class VarNameExpr
@@ -24,28 +25,17 @@ public :
   VarNameExpr(const std::string &name, Variable *attr = 0)
     : name_(name), attr_(attr) {}
 
-  /**
-   * @param builder
-   *
-   * CodeGenContext::CodeGen() 中呼叫 AST node 的 CodeGen 時所傳入。
-   * AST node 的 CodeGen 可利用此參數產生 LLVM IR。
-   *
-   * @return
-   *
-   * 傳回 llvm::Value* 供上層 AST node 的 CodeGen 使用。
-   *
-   */
   llvm::Value *CodeGen(llvm::IRBuilder<> &builder)
   {
     return builder.CreateLoad(attr_->value(), name_.c_str());
   }
 
   std::string name() const { return name_; }
-  Variable *attr() const { return attr_; }
+  Variable *attr() const { return attr_.get(); }
 
 private :
   std::string name_;
-  Variable *attr_;
+  boost::shared_ptr<Variable> attr_;
 };
 
 #endif

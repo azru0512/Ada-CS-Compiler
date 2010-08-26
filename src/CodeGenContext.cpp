@@ -4,6 +4,7 @@
 #include "Type/IntType.hpp"
 #include "Type/FloatType.hpp"
 #include "Type/BooleanType.hpp"
+#include "Type/StringType.hpp"
 #include "llvm/DerivedTypes.h"
 #include "llvm/GlobalValue.h"
 #include "llvm/LLVMContext.h"
@@ -58,7 +59,9 @@ const llvm::Type *CodeGenContext::TypeOf(const Type &type)
     return llvm::Type::getDoubleTy(llvm::getGlobalContext());
   else if (typeid(type) == typeid(BooleanType))
     return llvm::Type::getInt1Ty(llvm::getGlobalContext());
-  else // Not LLVM support data type
+  else if (typeid(type) == typeid(StringType))
+    return llvm::Type::getInt8Ty(llvm::getGlobalContext());
+  else  // 目前尚未支援此型態!
     return llvm::Type::getVoidTy(llvm::getGlobalContext());
 }
 
@@ -73,13 +76,30 @@ llvm::AllocaInst *CodeGenContext::CreateEntryBlockAlloca(llvm::Function *func,
   llvm::IRBuilder<> tmp(&func->getEntryBlock(), func->getEntryBlock().begin());
 
   if (typeid(type) == typeid(IntType))
-    return tmp.CreateAlloca(llvm::Type::getInt64Ty(llvm::getGlobalContext()), 0, name.c_str());
+  {
+    return tmp.CreateAlloca(llvm::Type::getInt64Ty(llvm::getGlobalContext()),
+                            0, name.c_str());
+  }
   else if (typeid(type) == typeid(FloatType))
-    return tmp.CreateAlloca(llvm::Type::getDoubleTy(llvm::getGlobalContext()), 0, name.c_str());
+  {
+    return tmp.CreateAlloca(llvm::Type::getDoubleTy(llvm::getGlobalContext()),
+                            0, name.c_str());
+  }
   else if (typeid(type) == typeid(BooleanType))
-    return tmp.CreateAlloca(llvm::Type::getInt1Ty(llvm::getGlobalContext()), 0, name.c_str());
+  {
+    return tmp.CreateAlloca(llvm::Type::getInt1Ty(llvm::getGlobalContext()),
+                            0, name.c_str());
+  }
+  else if (typeid(type) == typeid(StringType))
+  {
+    return tmp.CreateAlloca(llvm::Type::getInt8Ty(llvm::getGlobalContext()),
+                            0, name.c_str());
+  }
   else
-    return tmp.CreateAlloca(llvm::Type::getVoidTy(llvm::getGlobalContext()), 0, name.c_str());
+  {
+    return tmp.CreateAlloca(llvm::Type::getVoidTy(llvm::getGlobalContext()),
+                            0, name.c_str());
+  }
 }
 
 void CodeGenContext::WriteBitCode() const

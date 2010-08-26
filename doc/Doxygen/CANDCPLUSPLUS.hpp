@@ -12,6 +12,7 @@
  * - <a href="http://jvm.cs.nctu.edu.tw/~chenwj/ebook/C++%20Primer/ch18lev1sec2.html">Run-time Type Identification</a>
  *
  * C/C++ FAQ:
+ * - <a href="http://www.parashift.com/c++-faq-lite/const-correctness.html#faq-18.6">[18.6] What does "Fred const& x" mean?</a>
  * - <a href="http://www.parashift.com/c++-faq-lite/containers.html#faq-34.6">[34.6] Can I have a container of smart pointers to my objects?</a>  
  *
  * 參考文件:

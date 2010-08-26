@@ -12,6 +12,7 @@ class Node
 {
 public :
   // 每個節點將會實作自己的虛擬函式 CodeGen。此函式用來產生 LLVM IR。
+  // 不能傳入 const llvm::IRBuilder<> &builder，其成員函式為 non-const。
   virtual llvm::Value *CodeGen(llvm::IRBuilder<> &builder) {}
 
   virtual ~Node() {}

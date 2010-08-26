@@ -4,13 +4,15 @@
 
 #include "AST/Statement.hpp"
 
-/// Class NullStat
-/// Represents a null statement, i.e. ";" 
+// 類別 NullStat
+// 
+// 代表空陳述句 ";"。 
 class NullStat : public Statement
 {
 public :
   NullStat() {}
 
+  // IRBuilder 不產生 IR。
   llvm::Value *CodeGen(llvm::IRBuilder<> &builder) {}
 };
 

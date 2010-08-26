@@ -3,18 +3,21 @@
 
 
 #include "AST/LiteralExpr.hpp"
+#include "Type/FloatType.hpp"
 #include "llvm/ADT/APFloat.h"
 #include "llvm/Constants.h"
 #include "llvm/LLVMContext.h"
 
-/**
- * Class FloatExpr
- * - 代表 Ada/CS 的 float literal
- */
+// 類別 FlotExpr
+//
+// 代表 float literal
 class FloatExpr : public LiteralExpr
 {
 public :
-  FloatExpr(double value) : value_(value) {}
+  explicit FloatExpr(double value)
+  : LiteralExpr(new FloatType()),
+    value_(value)
+  {}
 
   llvm::Value *CodeGen(llvm::IRBuilder<> &builder)
   {

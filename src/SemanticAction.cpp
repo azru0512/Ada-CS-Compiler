@@ -17,11 +17,13 @@
 #include "Type/BooleanType.hpp"
 #include "Type/FloatType.hpp"
 #include "Type/IntType.hpp"
+#include "Type/StringType.hpp"
 #include "parser.h"
 #include <iostream>
 #include <typeinfo>
 #include <vector>
 #include <boost/foreach.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 #define foreach BOOST_FOREACH
 
@@ -42,6 +44,7 @@ void start()
   sym_tbl.insert(SymbolTable::value_type("boolean", new TypeName(new BooleanType())));
   sym_tbl.insert(SymbolTable::value_type("float", new TypeName(new FloatType())));
   sym_tbl.insert(SymbolTable::value_type("integer", new TypeName(new IntType())));
+  sym_tbl.insert(SymbolTable::value_type("string", new TypeName(new StringType())));
 
   env.push_front(sym_tbl);
 }

@@ -4,6 +4,7 @@
 
 
 #include "AST/Expression.hpp"
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 class BinaryExpr : public Expression
 {
@@ -14,9 +15,9 @@ public :
   llvm::Value *CodeGen(llvm::IRBuilder<> &builder);
 
 private :
-  Node *op_;
-  Node *lhs_;
-  Node *rhs_;
+  boost::shared_ptr<Node> op_;
+  boost::shared_ptr<Node> lhs_;
+  boost::shared_ptr<Node> rhs_;
 };
 
 #endif

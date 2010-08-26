@@ -5,6 +5,7 @@
 #include "AST/DeclStat.hpp"
 #include "Type/Type.hpp"
 #include "SymbolTable.hpp"
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 // 類別 ObjDeclStat
 //
@@ -22,7 +23,7 @@ public :
 
 private :
   IdEntryList id_entry_list_;
-  Type *type_;
+  boost::shared_ptr<Type> type_;
 };
 
 #endif

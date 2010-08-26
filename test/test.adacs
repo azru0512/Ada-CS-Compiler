@@ -2,6 +2,7 @@ package
   body abc is
     i, j : float;
     k : boolean;
+    s : string;
   begin
     i := 2.0 * 2.0 + 42.1;
     j := i * 4.0;

@@ -11,7 +11,7 @@ llvm::Value *BinaryExpr::CodeGen(llvm::IRBuilder<> &builder)
   if ((lval == 0) || (rval == 0))
     return 0;
 
-  switch (dynamic_cast<TokenNode*>(op_)->token())
+  switch (boost::dynamic_pointer_cast<TokenNode>(op_)->token())
   {
     case PLUS:
       return builder.CreateAdd(lval, rval, "addtmp");

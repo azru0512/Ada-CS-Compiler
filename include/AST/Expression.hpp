@@ -4,6 +4,7 @@
 
 #include "AST/Node.hpp"
 #include "Type/Type.hpp"
+#include <boost/smart_ptr/shared_ptr.hpp>
 
 // 類別 Expression
 //
@@ -13,10 +14,10 @@ class Expression : public Node
 public :
   explicit Expression(Type *type = 0) : type_(type) {}
 
-  Type *type() const { return type_; }
+  Type *type() const { return type_.get(); }
 
 protected :
-  Type *type_;
+  boost::shared_ptr<Type> type_;
 };
 
 #endif
