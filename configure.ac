@@ -30,4 +30,4 @@ AC_TYPE_SIZE_T
 
 # Checks for library functions.
 
-AC_OUTPUT(Makefile src/Makefile include/Type/Makefile include/Attribute/Makefile include/Value/Makefile include/AST/Makefile)
+AC_OUTPUT(Makefile src/Makefile include/Type/Makefile include/Attribute/Makefile include/AST/Makefile)

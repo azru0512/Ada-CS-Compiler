@@ -1,6 +1,6 @@
 /** \page lexical 語彙分析
  *
- * 語彙分析 (Lexical Analysis) 使用<a href="http://flex.sourceforge.net/">Flex</a>。另外使用<a href="http://www.gnu.org/software/bison/">Bison</a>定義 Flex 傳回記號 (Token) 的值。 
+ * 語彙分析 (Lexical Analysis) 使用 <a href="http://flex.sourceforge.net/">Flex</a>。另外使用 <a href="http://www.gnu.org/software/bison/">Bison</a> 定義 Flex 傳回記號 (Token) 的值。 
  *
  * 參考文件:
  * - <a href="http://www.ibm.com/developerworks/cn/linux/sdk/lex/index.html">Yacc 与 Lex 快速入门</a>

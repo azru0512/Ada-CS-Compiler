@@ -38,6 +38,7 @@ class Attribute;
 
 // 供 ObjDelStat 使用的資料結構。
 typedef pair<const string, Attribute> IdEntry;
+
 typedef map<std::string, Attribute *> IdEntryList; 
 
 // 號表中所存的項目。項目由識別字的名字和其屬性構成。

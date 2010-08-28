@@ -7,8 +7,11 @@
 #include "AST/IdNode.hpp"
 #include "AST/TypeNameExpr.hpp"
 #include "AST/Statement.hpp"
+#include <memory>
 #include <string>
+#include <boost/smart_ptr/scoped_ptr.hpp>
 
+// 避免 #include 標頭檔。減少檔案之間的相依性。
 class BinaryExpr;
 class Expression;
 class TokenNode;
@@ -61,7 +64,7 @@ Expression *process_literal(long val);
 
 Expression *process_literal(double val);
 
-Expression *process_literal(std::string val);
+Expression *process_literal(const std::string &val);
 
 Node *process_op(size_t op);
 

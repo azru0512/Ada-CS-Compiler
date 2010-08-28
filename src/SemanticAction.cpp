@@ -20,10 +20,12 @@
 #include "Type/StringType.hpp"
 #include "parser.h"
 #include <iostream>
-#include <typeinfo>
+//#include <memory>
+//#include <typeinfo>
 #include <vector>
 #include <boost/foreach.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
+//#include <boost/smart_ptr/scoped_ptr.hpp>
 
 #define foreach BOOST_FOREACH
 
@@ -243,7 +245,7 @@ Expression *process_literal(double val)
   return new FloatExpr(val);
 }
 
-Expression *process_literal(string val)
+Expression *process_literal(const std::string &val)
 {
   return new StringExpr(val);
 }
@@ -265,7 +267,6 @@ BinaryExpr *eval_binary(Node *lhs, Node *op, Node *rhs)
 
 Statement *assignment(Node *lhs, Node *rhs)
 {
-
   return new AssignStat(lhs, rhs);
 }
 

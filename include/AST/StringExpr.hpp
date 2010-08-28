@@ -4,8 +4,8 @@
 
 #include "AST/LiteralExpr.hpp"
 #include "Type/StringType.hpp"
+#include "llvm/Constants.h"
 #include <string>
-#include <iostream>
 
 class StringExpr : public LiteralExpr
 {
@@ -17,7 +17,7 @@ public :
 
   llvm::Value *CodeGen(llvm::IRBuilder<> &builder)
   {
-    return builder.CreateGlobalString(value_.c_str(), "kerker"); 
+    return llvm::ConstantArray::get(llvm::getGlobalContext(), "haha");
   }
 
 private :
