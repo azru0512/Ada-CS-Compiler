@@ -10,6 +10,7 @@
  *  - <a href="https://sourceforge.net/">SourceForge</a>
  *
  *  參考文件:
+ *  - <a href="http://yao-blog.appspot.com/entry/hgsvn同步svn和mercurial">HGSVN同步SVN和Mercurial</a>
  *  - <a href="http://hg-git.github.com/">the Hg-Git mercurial plugin</a>
  *  - <a href="http://progit.org/book/zh/">Pro Git 简体中文版</a>
  *  - <a href="http://www.bitsun.com/documents/gittutorcn.htm">Git 中文教程</a>
