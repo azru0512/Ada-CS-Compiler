@@ -976,6 +976,8 @@ FORMULA_FONTSIZE       = 10
 
 SEARCHENGINE           = YES
 
+SERVER_BASED_SEARCH    = YES
+
 #---------------------------------------------------------------------------
 # configuration options related to the LaTeX output
 #---------------------------------------------------------------------------

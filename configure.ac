@@ -10,7 +10,7 @@ AC_CONFIG_MACRO_DIR([m4])
 LT_INIT
 
 # Checks for programs.
-AC_PROG_CXX([g++45])
+AC_PROG_CXX([g++44])
 
 # 檢查系統是否裝有 lex 或與其相容的套件
 AM_PROG_LEX
