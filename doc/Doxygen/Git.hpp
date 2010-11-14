@@ -10,6 +10,7 @@
  *  - <a href="https://sourceforge.net/">SourceForge</a>
  *
  *  參考文件:
+ *  - <a href="http://plog.longwin.com.tw/my_note-unix/2009/05/20/git-learn-test-command-2009">Git 初學筆記 - 實作測試</a>
  *  - <a href="http://yao-blog.appspot.com/entry/hgsvn同步svn和mercurial">HGSVN同步SVN和Mercurial</a>
  *  - <a href="http://hg-git.github.com/">the Hg-Git mercurial plugin</a>
  *  - <a href="http://progit.org/book/zh/">Pro Git 简体中文版</a>

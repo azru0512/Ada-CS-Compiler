@@ -39,5 +39,5 @@
  * 外部連結:
  * - <a href="http://www.boost.org/">Boost</a>
  * - <a href="http://code.google.com/p/boost-doc-zh/">汉化 boost 文档</a>    
- *
+ * - <a href="http://boost.ez2learn.com/">汉化 boost 文档 - 繁體</a>
  */ 

@@ -11,7 +11,7 @@ parser_SOURCES = main.cpp parser.ypp scanner.lpp SymbolTable.cpp SemanticAction.
 
 parser_LDADD = @LEXLIB@
 
-AM_CXXFLAGS = -O3 -std=c++0x -Wl,--rpath,/usr/local/lib/gcc44
+AM_CXXFLAGS = -O3 -std=c++0x -Wl,--rpath,/usr/local/lib/gcc46
 
 AM_CPPFLAGS = -I ${includedir}:$(top_srcdir)/include -I/usr/local/include -D_DEBUG -D_GNU_SOURCE -D__STDC_LIMIT_MACROS -D__STDC_CONSTANT_MACROS
 

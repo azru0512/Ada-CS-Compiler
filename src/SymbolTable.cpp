@@ -27,7 +27,7 @@ SymTblEntry *Lookup(const string &name, bool sensitive)
       return &(*id_entry);
   }
 
-  return 0;
+  return nullptr;
 }
 
 SymTblEntry *Enter(const string &name)
@@ -39,7 +39,7 @@ SymTblEntry *Enter(const string &name)
   if (ret.second) // 寫入成功。
     return &*(ret.first);
   else // 寫入失敗。因為目前 scope 的符號表中已存在相同名字的識別字。
-    return 0;
+    return nullptr;
 }
 
 void SetAttribute(IdEntry *id_entry)

@@ -20,7 +20,11 @@
  *
  *  若有任何問題請寄信至 <chenwj at cs.nctu.edu.tw>
  *
- *  If you have any question, feel free to send email to <chenwj at cs.nctu.edu.tw>. 
+ *  If you have any question, feel free to send email to <chenwj at cs.nctu.edu.tw>.
+ *
+ *  p.s. 我正在翻譯維基百科 C++0x 頁面，歡迎您一起參與編輯。:)
+ *
+ *  p.s. I am also traslating wikipedia C++0x entry into chinese, feel free to leave your comment on my translation.
  */
 
 #ifndef _MAINPAGE_H_

@@ -27,5 +27,5 @@
  * - <a href="http://jvm.cs.nctu.edu.tw/~chenwj/ebook/TICPP-2nd-ed-Vol-two/html/TicV2.html">Thinking in C++, 2nd ed. Volume 2</a>
  * - <a href="http://www.parashift.com/c++-faq-lite/">C++ FAQ LITE </a>
  * - <a href=http://www.cplusplus.com/>cplusplus.com</a>
- *
+ * - <a href="http://accu.org/index.php">ACCU</a>
  */
