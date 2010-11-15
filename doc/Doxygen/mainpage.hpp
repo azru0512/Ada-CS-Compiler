@@ -12,6 +12,8 @@
  *  - \subpage codegen
  *  - \subpage en2ch
  *
+ *  以上文件將會逐漸移至<a href="http://www.cis.nctu.edu.tw/~is92065/dokuwiki">維基</a>。
+ *
  *  注意! 關於編譯器理論或是本計劃會使用到的工具，本文件不打算給予詳盡介紹。文中僅會引用簡易參考文件，再加上些許說明。詳細文件列在參考文件。
  *
  *  可以使用 git clone git://github.com/azru0512/Ada-CS-Compiler.git 下載本計劃。
